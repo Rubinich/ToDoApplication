@@ -20,6 +20,7 @@ public class MenuController {
     @FXML
     public void initialize() {
         List<String> options = Arrays.asList(
+                "Po korisničkom imenu",
                 "Po naslovu",
                 "Po opisu",
                 "Po datumu",
