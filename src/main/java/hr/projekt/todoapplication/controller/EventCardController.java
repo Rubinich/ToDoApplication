@@ -6,10 +6,8 @@ import javafx.scene.control.Label;
 import java.time.format.DateTimeFormatter;
 
 public class EventCardController {
-    @FXML
-    private Label titleLabel;
-    @FXML
-    private Label dateLabel;
+    @FXML private Label titleLabel;
+    @FXML private Label dateLabel;
 
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
 

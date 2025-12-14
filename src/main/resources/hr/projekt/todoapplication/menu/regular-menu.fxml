@@ -5,35 +5,17 @@
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefWidth="1024.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="CONTROLLER_NAME">
-   <children>
+<AnchorPane prefWidth="1024.0" xmlns="http://javafx.com/javafx/25">
       <MenuBar prefWidth="1024.0">
-        <menus>
           <Menu mnemonicParsing="false" text="Događaji">
-            <items>
               <MenuItem mnemonicParsing="false" text="Prikaži" />
                   <Menu mnemonicParsing="false" text="Pretraži">
-                    <items>
                       <MenuItem mnemonicParsing="false" text="Po naslovu" />
                         <MenuItem mnemonicParsing="false" text="Po opisu" />
                         <MenuItem mnemonicParsing="false" text="Po datumu završetka" />
                         <MenuItem mnemonicParsing="false" text="Po prioritetu" />
                         <MenuItem mnemonicParsing="false" text="Po kategoriji" />
-                    </items>
                   </Menu>
-            </items>
           </Menu>
-          <Menu mnemonicParsing="false" text="Edit">
-            <items>
-              <MenuItem mnemonicParsing="false" text="Delete" />
-            </items>
-          </Menu>
-          <Menu mnemonicParsing="false" text="Help">
-            <items>
-              <MenuItem mnemonicParsing="false" text="About" />
-            </items>
-          </Menu>
-        </menus>
       </MenuBar>
-   </children>
 </AnchorPane>

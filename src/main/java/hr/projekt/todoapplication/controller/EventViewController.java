@@ -6,11 +6,9 @@ import hr.projekt.todoapplication.model.user.User;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import java.awt.*;
 import java.io.IOException;
 import java.util.List;
@@ -19,9 +17,7 @@ import java.util.Optional;
 public class EventViewController {
     private static final Logger log = LoggerFactory.getLogger(EventViewController.class);
 
-    @FXML
-    private VBox eventContainer;
-
+    @FXML private VBox eventContainer;
     private Planner planner;
 
     @FXML

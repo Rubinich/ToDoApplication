@@ -1,64 +1,36 @@
 package hr.projekt.todoapplication.controller;
 
-import javafx.fxml.FXML;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuItem;
-import java.util.Arrays;
-import java.util.List;
+import hr.projekt.todoapplication.ToDoApplication;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+
+import java.io.IOException;
 
 public class MenuController {
 
-    @FXML
-    private Menu searchMenu;
-    @FXML
-    private Menu filterMenu;
-    @FXML
-    private Menu sortMenu;
-    @FXML
-    private Menu groupMenu;
+    public void openHome() {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(ToDoApplication.class.getResource("main-screen.fxml"));
+            Scene scene = new Scene(fxmlLoader.load(), 1024, 768);
 
-    @FXML
-    public void initialize() {
-        List<String> options = Arrays.asList(
-                "Po korisničkom imenu",
-                "Po naslovu",
-                "Po opisu",
-                "Po datumu",
-                "Po prioritetu",
-                "Po kategoriji"
-        );
-
-        fillTheMenu(searchMenu, options);
-        fillTheMenu(filterMenu, options);
-        fillTheMenu(sortMenu, options);
-        fillTheMenu(groupMenu, options);
-    }
-
-    private void fillTheMenu(Menu menu, List<String> options) {
-        for(String option : options) {
-            MenuItem item = new MenuItem(option);
-            item.setOnAction(e -> callSearchOption(option));
-            menu.getItems().add(item);
+            ToDoApplication.getMainStage().setTitle("Početak");
+            ToDoApplication.getMainStage().setScene(scene);
+            ToDoApplication.getMainStage().show();
+        } catch (IOException | IllegalStateException e) {
+            e.printStackTrace();
         }
     }
 
-    private void callSearchOption(String option) {
+    public void openEventSearch() {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(ToDoApplication.class.getResource("event/event-search-screen.fxml"));
+            Scene scene = new Scene(fxmlLoader.load(), 1024, 768);
 
+            ToDoApplication.getMainStage().setTitle("Pretraga događaja");
+            ToDoApplication.getMainStage().setScene(scene);
+            ToDoApplication.getMainStage().show();
+        } catch (IOException | IllegalStateException e) {
+            e.printStackTrace();
+        }
     }
-
-    private void searchByCategory() {
-    }
-
-    private void searchByPriority() {
-    }
-
-    private void searchByDate() {
-    }
-
-    private void searchByDescription() {
-    }
-
-    private void searchByTitle() {
-    }
-
 }

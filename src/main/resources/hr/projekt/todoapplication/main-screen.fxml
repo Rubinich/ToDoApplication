@@ -9,16 +9,14 @@
             prefHeight="768.0" prefWidth="1024.0"
             xmlns="http://javafx.com/javafx/25"
             xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="hr.projekt.todoapplication.controller.EventViewController"
->
+            fx:controller="hr.projekt.todoapplication.controller.EventViewController">
     <top>
-        <fx:include source="menu/admin-menu.fxml" />
+            <fx:include fx:id="adminMenu" source="menu/admin-menu.fxml"/>
     </top>
    <center>
       <ScrollPane  fitToWidth="true" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-         <content>
             <VBox prefHeight="700.0" prefWidth="1024.0" fx:id="eventContainer" spacing="5"/>
-         </content>
       </ScrollPane>
    </center>
+
 </BorderPane>

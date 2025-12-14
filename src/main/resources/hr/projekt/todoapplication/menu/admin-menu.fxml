@@ -6,20 +6,10 @@
 <?import javafx.scene.layout.AnchorPane?>
 
 <AnchorPane xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hr.projekt.todoapplication.controller.MenuController">
-    <children>
         <MenuBar prefWidth="1024.0">
-            <menus>
                 <Menu mnemonicParsing="false" text="Događaji">
-                    <items>
-                        <MenuItem mnemonicParsing="false" text="Prikaži" />
-                        <Menu fx:id="searchMenu" mnemonicParsing="false" text="Pretraži" />
-                        <Menu fx:id="filterMenu" mnemonicParsing="false" text="Filtriraj" />
-                        <Menu fx:id="sortMenu" mnemonicParsing="false" text="Sortiraj" />
-                        <Menu fx:id="groupMenu" mnemonicParsing="false" text="Grupiraj" />
-                    </items>
+                        <MenuItem mnemonicParsing="false" text="Početak" onAction="#openHome"/>
+                        <MenuItem mnemonicParsing="false" text="Pretraži" onAction="#openEventSearch"/>
                 </Menu>
-
-            </menus>
         </MenuBar>
-    </children>
 </AnchorPane>

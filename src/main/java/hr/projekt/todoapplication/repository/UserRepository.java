@@ -1,12 +1,9 @@
 package hr.projekt.todoapplication.repository;
 
 import hr.projekt.todoapplication.model.user.User;
-import hr.projekt.todoapplication.util.JsonStorage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import java.io.IOException;
-import java.io.Serializable;
 import java.nio.file.Path;
 import java.util.Collections;
 import java.util.HashSet;
@@ -19,26 +16,27 @@ public class UserRepository {
     private static final Path DATA_FILE = Path.of("data/users.json");
     private static final Path BACKUP_FILE = Path.of("data/backup.bin");
 
-    private final JsonStorage<UserCollection> storage;
+    private final Storage<UserCollection> fileStorage;
+    private final Storage<UserCollection> backupStorage;
     private final Set<User> users;
 
-
     public UserRepository() {
-        this.storage = new JsonStorage<>(UserCollection.class);
+        this.fileStorage = new JsonStorage<>(UserCollection.class);
+        this.backupStorage = new BinaryStorage<>();
         this.users = new HashSet<>();
         loadAll();
     }
 
     private void loadAll() {
         try{
-            UserCollection collection = storage.readFromFile(DATA_FILE);
-            if(collection != null && collection.users != null) {
-                users.addAll(collection.users);
-                log.info("Ucitano {} korisnika iz {}", users.size(), DATA_FILE);
-            } else {
-                log.info("Nema postojecih podataka.");
-            }
-        } catch (IOException e) {
+            Optional<UserCollection> collection = fileStorage.read(DATA_FILE);
+            collection.ifPresent(c -> {
+                if (c.users != null) {
+                    users.addAll(c.users);
+                    log.info("Učitano {} korisnika iz {}", users.size(), DATA_FILE);
+                }
+            });
+        } catch (IOException | ClassNotFoundException e) {
             log.error("Greska pri ucitavanju korisnika: {}", e.getMessage(), e);
             throw new RuntimeException("Nije moguce ucitati korisnike", e);
         }
@@ -48,7 +46,7 @@ public class UserRepository {
         try{
             UserCollection collection = new UserCollection();
             collection.users = users;
-            storage.writeToFile(DATA_FILE, collection);
+            fileStorage.write(DATA_FILE, collection);
             log.debug("Spremljeno {} korisnika u {}", users.size(), DATA_FILE);
         } catch (IOException e) {
             log.error("Greska pri spremanju korisnika: {}", e.getMessage(), e);
@@ -83,7 +81,7 @@ public class UserRepository {
         try {
             UserCollection collection = new UserCollection();
             collection.users = users;
-            storage.writeToBinary(BACKUP_FILE, collection);
+            backupStorage.write(BACKUP_FILE, collection);
             log.info("Backup uspješno kreiran: {}", BACKUP_FILE);
         } catch (Exception e) {
             log.error("Greška pri kreiranju backupa: {}", e.getMessage(), e);
@@ -93,15 +91,15 @@ public class UserRepository {
 
     public void restoreFromBackup() {
         try {
-            UserCollection collection = storage.readFromBinary(BACKUP_FILE);
-            if (collection == null) {
-                log.warn("Backup datoteka ne postoji: {}", BACKUP_FILE);
-                throw new RuntimeException("Backup datoteka ne postoji");
-            }
-            users.clear();
-            users.addAll(collection.users);
-            saveAll();
-            log.info("Backup uspješno vraćen: {} korisnika", users.size());
+            Optional<UserCollection> collection = backupStorage.read(BACKUP_FILE);
+            collection.ifPresent(c -> {
+                if(c.users != null) {
+                    users.clear();
+                    users.addAll(c.users);
+                    saveAll();
+                    log.info("Backup vraćen: {} korisnika", users.size());
+                }
+            });
         } catch (Exception e) {
             log.error("Greška pri vraćanju backupa: {}", e.getMessage(), e);
             throw new RuntimeException("Nije moguće vratiti backup", e);
