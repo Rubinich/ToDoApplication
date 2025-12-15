@@ -40,7 +40,7 @@ public abstract class User implements Serializable {
      */
     protected List<Event> events = new ArrayList<>();
 
-    public User() {}
+    protected User() {}
 
     /**
      * Stvara novog korisnika s definiranim korisnickim imenom i lozinkom.

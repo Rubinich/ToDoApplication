@@ -9,13 +9,13 @@ import javafx.scene.Parent;
 import javafx.scene.layout.VBox;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import java.awt.*;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
 public class EventViewController {
     private static final Logger log = LoggerFactory.getLogger(EventViewController.class);
+    private static final String EVENT_CARD_PATH = "/hr/projekt/todoapplication/event/event-card.fxml";
 
     @FXML private VBox eventContainer;
     private Planner planner;
@@ -52,8 +52,7 @@ public class EventViewController {
     }
 
     private void addEventCard(Event event) throws IOException {
-        String fxmlPath = "/hr/projekt/todoapplication/event/event-card.fxml";
-        FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource(EVENT_CARD_PATH));
         Parent eventCard = loader.load();
         EventCardController controller = loader.getController();
         controller.setEvent(event);

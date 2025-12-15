@@ -8,5 +8,9 @@ import java.util.Set;
 
 public class UserCollection implements Serializable {
     public Set<User> users = new HashSet<>();
-    public UserCollection() {}
+    public UserCollection() {
+        /*
+        ovo je za serijalizaciju
+         */
+    }
 }

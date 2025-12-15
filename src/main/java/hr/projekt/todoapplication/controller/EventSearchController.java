@@ -4,14 +4,13 @@ import hr.projekt.todoapplication.model.Planner;
 import hr.projekt.todoapplication.model.event.Event;
 import hr.projekt.todoapplication.model.event.SearchCriteria;
 import hr.projekt.todoapplication.model.user.User;
+import hr.projekt.todoapplication.util.DialogUtil;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -52,6 +51,7 @@ public class EventSearchController{
         List<Event> events = currentUser.map(User::getEvents).orElse(List.of());
         filteredEvents = new FilteredList<>(FXCollections.observableArrayList(events));
         table.setItems(filteredEvents);
+        table.setPlaceholder(new Label(""));
 
         comboCriteria.setItems(FXCollections.observableArrayList(SearchCriteria.values()));
         comboCriteria.setValue(SearchCriteria.TITLE);
@@ -78,7 +78,7 @@ public class EventSearchController{
         }
 
         String searchInput = input.get();
-        String searchLower = searchInput.toLowerCase();
+        String searchLower = input.get().toLowerCase();
         SearchCriteria criteria = Optional.ofNullable(comboCriteria.getValue()).orElse(SearchCriteria.TITLE);
 
         filteredEvents.setPredicate(e -> switch(criteria) {
@@ -87,6 +87,10 @@ public class EventSearchController{
             case DESCRIPTION -> matchDescription(e, searchLower);
             case DATETIME -> matchDateTime(e.getDueDate(), searchInput);
         });
+
+        if (filteredEvents.isEmpty()) {
+            DialogUtil.showInfo("Nema rezultata za zadane kriterije pretraživanja.");
+        }
     }
 
     private boolean matchTitle(Event event, String searchLower) {
