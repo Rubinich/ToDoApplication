@@ -8,8 +8,9 @@
 <AnchorPane xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hr.projekt.todoapplication.controller.MenuController">
         <MenuBar prefWidth="1024.0">
                 <Menu mnemonicParsing="false" text="Događaji">
-                        <MenuItem mnemonicParsing="false" text="Početak" onAction="#openHome"/>
-                        <MenuItem mnemonicParsing="false" text="Pretraži" onAction="#openEventSearch"/>
+                        <MenuItem mnemonicParsing="false" onAction="#openHome" text="Početak" />
+                        <MenuItem mnemonicParsing="false" onAction="#openEventSearch" text="Pretraži" />
+                        <MenuItem mnemonicParsing="false" onAction="#openAddEvent" text="Dodaj" />
                 </Menu>
         </MenuBar>
 </AnchorPane>

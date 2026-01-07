@@ -14,7 +14,7 @@
     <top>
         <VBox>
             <fx:include source="../menu/admin-menu.fxml" />
-            <Label style="-fx-font-size: 18px; -fx-font-weight: bold;" text="PRETRAGA DOGAĐAJA" />
+            <Label text="PRETRAGA DOGAĐAJA" />
             <HBox spacing="8">
                 <ComboBox fx:id="comboCriteria" prefHeight="25.0" prefWidth="215.0" />
                 <TextField fx:id="searchField" prefHeight="25.0" prefWidth="374.0" promptText="Upiši bilo što (naslov/opis/korisnik)..." />

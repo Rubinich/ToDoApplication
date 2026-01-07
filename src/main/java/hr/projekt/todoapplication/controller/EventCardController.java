@@ -16,6 +16,5 @@ public class EventCardController {
             return;
         titleLabel.setText(event.getTitle());
         dateLabel.setText(DATE_FORMATTER.format(event.getDueDate()));
-
     }
 }

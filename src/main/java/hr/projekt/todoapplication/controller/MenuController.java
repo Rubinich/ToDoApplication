@@ -33,4 +33,18 @@ public class MenuController {
             e.printStackTrace();
         }
     }
+
+    public void openAddEvent() {
+        try{
+            FXMLLoader fxmlLoader = new FXMLLoader(ToDoApplication.class.getResource("event/event-add-screen.fxml"));
+            Scene scene = new Scene(fxmlLoader.load(), 1024, 768);
+
+            ToDoApplication.getMainStage().setTitle("Dodavanje događaja");
+            ToDoApplication.getMainStage().setScene(scene);
+            ToDoApplication.getMainStage().show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
 }
