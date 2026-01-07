@@ -36,10 +36,11 @@ public class EventAddController {
         spinner.setValueFactory(factory);
         spinner.setOnKeyPressed(event -> {
             KeyCode code = event.getCode();
-            if(code == KeyCode.UP || code == KeyCode.W)
+            if(code == KeyCode.W) {
                 spinner.increment();
-            else if(code == KeyCode.DOWN || code == KeyCode.S)
+            } else if(code == KeyCode.S) {
                 spinner.decrement();
+            }
         });
     }
 
