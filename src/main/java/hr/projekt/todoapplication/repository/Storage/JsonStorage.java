@@ -1,4 +1,4 @@
-package hr.projekt.todoapplication.repository;
+package hr.projekt.todoapplication.repository.Storage;
 
 import jakarta.json.bind.Jsonb;
 import jakarta.json.bind.JsonbBuilder;

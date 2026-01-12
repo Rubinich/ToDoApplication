@@ -15,7 +15,7 @@ import java.util.Optional;
 
 public class EventViewController {
     private static final Logger log = LoggerFactory.getLogger(EventViewController.class);
-    private static final String EVENT_CARD_PATH = "/hr/projekt/todoapplication/event/event-card.fxml";
+    private static final String EVENT_CARD_PATH = "/hr/projekt/todoapplication/event/event-card-screen.fxml";
 
     @FXML private VBox eventContainer;
     private Planner planner;
@@ -23,21 +23,17 @@ public class EventViewController {
     @FXML
     void initialize() {
         planner = new Planner();
-        loadEvents();
+        loadEventsOnScreen();
     }
 
-    private void loadEvents() {
+    private void loadEventsOnScreen() {
         eventContainer.getChildren().clear();
-        Optional<User> currentUser = planner.getCurrentUser();
+        List<Event> events = planner.getCurrentUserEvents();
 
-        if(currentUser.isEmpty()) {
-            log.warn("Nema prijavljenog korisnika.");
-            return;
-        }
-
-        List<Event> events = currentUser.get().getEvents();
         if(events == null || events.isEmpty()) {
-            log.info("Korisnik {} nema dogadaja.", currentUser.get().getUsername());
+            planner.getCurrentUser().ifPresentOrElse(
+                    user -> log.info("Korisnik {} nema događaja.", user.getUsername()),
+                    () -> log.warn("Nema prijavljenog korisnika."));
             return;
         }
 
@@ -48,7 +44,7 @@ public class EventViewController {
                 log.error("Greska pri ucitavanju kartice za dogadaj {} : {}", event.getTitle(), e.getMessage(), e);
             }
         }
-        log.info("Prikazano {} dogadaja za korisnika {}", events.size(), currentUser.get().getUsername());
+        planner.getCurrentUser().ifPresent(user -> log.info("Prikazano {} događaja za korisnika {}", events.size(), user.getUsername()));
     }
 
     private void addEventCard(Event event) throws IOException {

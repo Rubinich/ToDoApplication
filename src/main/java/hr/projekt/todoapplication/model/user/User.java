@@ -35,10 +35,6 @@ public abstract class User implements Serializable {
      */
     protected String username;
     protected String password;
-    /**
-     * Lista dogadaja koji pripadaju korisniku.
-     */
-    protected List<Event> events = new ArrayList<>();
 
     protected User() {}
 
@@ -59,43 +55,6 @@ public abstract class User implements Serializable {
      */
     public String getUsername() {
         return username;
-    }
-
-    /**
-     * Dodaje novi dogadaj korisniku.
-     * <p>Ako dogadaj uspjesno bude dodan, ispisuje poruku i upisuje zapis u log.</p>
-     *
-     * @param newEvent dogadaj koji se dodaje
-     */
-    public void addEvent(Event newEvent) {
-        events.add(newEvent);
-        System.out.println("Dogadaj \"" + newEvent.getTitle() + "\" dodan korisniku " + username + ".");
-        log.info("Korisnik {} dodao dogadaj {}.", username, newEvent.getTitle());
-        //XMLLogger.log("Korisnik je odabrao izlaz iz aplikacije.");
-
-    }
-
-    /**
-     * Vraca broj dogadaja koje korisnik ima.
-     *
-     * @return broj dogadaja
-     */
-    @JsonbTransient
-    public int getEventCount() {
-        return events.size();
-    }
-
-    /**
-     * Vraca sve dogadaje korisnika.
-     *
-     * @return lista dogadaja korisnika
-     */
-    public List<Event> getEvents() {
-        return events;
-    }
-
-    public void setEvents(List<Event> events) {
-        this.events = events;
     }
 
     public void setUsername(String username) {

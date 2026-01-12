@@ -1,11 +1,11 @@
-package hr.projekt.todoapplication.repository;
+package hr.projekt.todoapplication.repository.Storage;
 
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Optional;
 
-public final class BinaryStorage<T> implements Storage<T>{
+public final class BinaryStorage<T> implements Storage<T> {
 
     @Override
     public void write(Path path, T object) throws IOException {

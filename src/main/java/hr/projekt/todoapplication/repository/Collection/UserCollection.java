@@ -1,4 +1,4 @@
-package hr.projekt.todoapplication.repository;
+package hr.projekt.todoapplication.repository.Collection;
 
 import hr.projekt.todoapplication.model.user.User;
 

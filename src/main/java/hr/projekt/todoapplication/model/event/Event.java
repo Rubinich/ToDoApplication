@@ -2,6 +2,7 @@ package hr.projekt.todoapplication.model.event;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 /**
  * Predstavlja jedan dogadaj u sustavu.
@@ -12,12 +13,16 @@ import java.time.LocalDateTime;
  * </p>
  */
 public class Event implements Serializable {
+    private String id;
     private String title;
     private String description;
     private LocalDateTime dueDate;
     private EventInfo info;
+    private String ownerUsername;
 
-    public Event() {}
+    public Event() {
+        this.id = UUID.randomUUID().toString();
+    }
 
     /**
      * Privatni konstruktor koji se koristi samo unutar klase {@link EventBuilder}.
@@ -25,10 +30,12 @@ public class Event implements Serializable {
      * @param builder objekt koji sadrzi sve podatke potrebne za stvaranje dogadaja
      */
     private Event(EventBuilder builder) {
+        this.id = UUID.randomUUID().toString();
         this.title = builder.title;
         this.description = builder.description;
         this.dueDate = builder.dueDate;
         this.info = new EventInfo(builder.priority, builder.category);
+        this.ownerUsername = builder.ownerUsername;
     }
 
     public void setTitle(String title) {
@@ -47,6 +54,22 @@ public class Event implements Serializable {
         this.info = info;
     }
 
+    public String getOwnerUsername() {
+        return ownerUsername;
+    }
+
+    public void setOwnerUsername(String ownerUsername) {
+        this.ownerUsername = ownerUsername;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
     /**
      * Omogucuje stvaranje objekta {@link Event} koristenjem "builder" obrasca.
      * <p>
@@ -60,6 +83,7 @@ public class Event implements Serializable {
         private final LocalDateTime dueDate;
         private PriorityLevel priority = PriorityLevel.ZADANO;
         private EventCategory category = EventCategory.OSNOVNO;
+        private String ownerUsername;
 
         /**
          * Inicijalizira osnovne podatke o dogadaju.
@@ -72,6 +96,11 @@ public class Event implements Serializable {
             this.title = title;
             this.description = description;
             this.dueDate = dueDate;
+        }
+
+        private EventBuilder owner(String ownerUsername) {
+            this.ownerUsername = ownerUsername;
+            return this;
         }
 
         /**
@@ -146,6 +175,7 @@ public class Event implements Serializable {
                 "\nDatum: " + dueDate +
                 "\nKategorija: " + info.category() +
                 "\nPrioritet: " + info.priority() +
+                "\nVlasnik: " + ownerUsername +
                 "\n----------------------------";
     }
 }

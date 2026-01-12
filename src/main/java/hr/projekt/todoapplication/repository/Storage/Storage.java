@@ -1,10 +1,10 @@
-package hr.projekt.todoapplication.repository;
+package hr.projekt.todoapplication.repository.Storage;
 
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Optional;
 
-public sealed interface Storage<T> permits BinaryStorage, JsonStorage {
+public sealed interface Storage<T> permits BinaryStorage, JsonStorage, XmlStorage {
     void write(Path path, T object) throws IOException;
     Optional<T> read(Path path) throws IOException, ClassNotFoundException;
 }

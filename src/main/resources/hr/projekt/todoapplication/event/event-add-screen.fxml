@@ -54,6 +54,6 @@
         </GridPane>
    </center>
    <bottom>
-      <Button fx:id="addButton" mnemonicParsing="false" text="Dodaj" BorderPane.alignment="CENTER" />
+      <Button fx:id="addButton" mnemonicParsing="false" text="Dodaj" onAction="#createEvent" BorderPane.alignment="CENTER" />
    </bottom>
 </BorderPane>

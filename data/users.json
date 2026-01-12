@@ -2,24 +2,28 @@
   "users": [
     {
       "@type": "admin",
-      "username": "mate miso kovac",
-      "password": "123",
-      "events": [
-        {
-          "title": "Dolazak na faks",
-          "description": "Borungaj i java",
-          "dueDate": "2027-05-04T12:00:00",
-          "category": "POSAO",
-          "priority": "VAZNO"
-        },
-        {
-          "title": "Odlazak u ducan",
-          "description": "Kupnja odjece",
-          "dueDate": "2026-10-13T13:05:00",
-          "category": "SHOPPING",
-          "priority": "ZADANO"
-        }
-      ]
+      "username": "admin",
+      "password": "admin123"
+    },
+    {
+      "@type": "regular",
+      "username": "marko",
+      "password": "marko123"
+    },
+    {
+      "@type": "regular",
+      "username": "ana",
+      "password": "ana123"
+    },
+    {
+      "@type": "admin",
+      "username": "petar",
+      "password": "petar123"
+    },
+    {
+      "@type": "regular",
+      "username": "ivana",
+      "password": "ivana123"
     }
   ]
 }

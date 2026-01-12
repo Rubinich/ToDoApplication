@@ -1,0 +1,169 @@
+{
+  "events": [
+    {
+      "id": "a1b2c3d4-e5f6-7890-abcd-111111111111",
+      "title": "Sastanak s timom",
+      "description": "Planiranje projekta za Q1 2026",
+      "dueDate": "2026-01-15T10:00:00",
+      "ownerUsername": "admin",
+      "info": {
+        "priority": "VAZNO",
+        "category": "POSAO"
+      }
+    },
+    {
+      "id": "b2c3d4e5-f6g7-8901-bcde-222222222222",
+      "title": "Rođendan",
+      "description": "Proslave rođendan prijatelja",
+      "dueDate": "2026-02-20T18:30:00",
+      "ownerUsername": "admin",
+      "info": {
+        "priority": "ZADANO",
+        "category": "OSOBNO"
+      }
+    },
+    {
+      "id": "c3d4e5f6-g7h8-9012-cdef-333333333333",
+      "title": "Kupovina namirnica",
+      "description": "Mleko, hleb, sir, jaja, voće",
+      "dueDate": "2026-01-12T17:00:00",
+      "ownerUsername": "marko",
+      "info": {
+        "priority": "ZADANO",
+        "category": "SHOPPING"
+      }
+    },
+    {
+      "id": "d4e5f6g7-h8i9-0123-defg-444444444444",
+      "title": "Dolazak na faks",
+      "description": "Predavanje iz Java programiranja",
+      "dueDate": "2026-01-13T09:00:00",
+      "ownerUsername": "marko",
+      "info": {
+        "priority": "VAZNO",
+        "category": "POSAO"
+      }
+    },
+    {
+      "id": "e5f6g7h8-i9j0-1234-efgh-555555555555",
+      "title": "Trening",
+      "description": "Teretana - dan nogu",
+      "dueDate": "2026-01-14T19:00:00",
+      "ownerUsername": "marko",
+      "info": {
+        "priority": "ZADANO",
+        "category": "OSOBNO"
+      }
+    },
+    {
+      "id": "f6g7h8i9-j0k1-2345-fghi-666666666666",
+      "title": "Prezentacija projekta",
+      "description": "Završna prezentacija seminarskog rada",
+      "dueDate": "2026-01-20T14:00:00",
+      "ownerUsername": "ana",
+      "info": {
+        "priority": "VAZNO",
+        "category": "POSAO"
+      }
+    },
+    {
+      "id": "g7h8i9j0-k1l2-3456-ghij-777777777777",
+      "title": "Shopping centar",
+      "description": "Kupovina nove zimske jakne",
+      "dueDate": "2026-01-16T16:00:00",
+      "ownerUsername": "ana",
+      "info": {
+        "priority": "ZADANO",
+        "category": "SHOPPING"
+      }
+    },
+    {
+      "id": "h8i9j0k1-l2m3-4567-hijk-888888888888",
+      "title": "Doktorski pregled",
+      "description": "Redovni godišnji sistematski pregled",
+      "dueDate": "2026-01-18T11:30:00",
+      "ownerUsername": "ana",
+      "info": {
+        "priority": "VAZNO",
+        "category": "OSOBNO"
+      }
+    },
+    {
+      "id": "i9j0k1l2-m3n4-5678-ijkl-999999999999",
+      "title": "Team building",
+      "description": "Godišnji team building event na planini",
+      "dueDate": "2026-02-10T09:00:00",
+      "ownerUsername": "petar",
+      "info": {
+        "priority": "VAZNO",
+        "category": "POSAO"
+      }
+    },
+    {
+      "id": "j0k1l2m3-n4o5-6789-jklm-aaaaaaaaaaaa",
+      "title": "Ručak s obitelji",
+      "description": "Nedeljni obiteljski ručak kod bake",
+      "dueDate": "2026-01-19T13:00:00",
+      "ownerUsername": "petar",
+      "info": {
+        "priority": "ZADANO",
+        "category": "OSOBNO"
+      }
+    },
+    {
+      "id": "k1l2m3n4-o5p6-7890-klmn-bbbbbbbbbbbb",
+      "title": "Kino",
+      "description": "Premijera novog Marvel filma",
+      "dueDate": "2026-01-22T20:00:00",
+      "ownerUsername": "ivana",
+      "info": {
+        "priority": "IGNORIRAJ",
+        "category": "OSOBNO"
+      }
+    },
+    {
+      "id": "l2m3n4o5-p6q7-8901-lmno-cccccccccccc",
+      "title": "Plaćanje računa",
+      "description": "Struja, plin, internet",
+      "dueDate": "2026-01-25T12:00:00",
+      "ownerUsername": "ivana",
+      "info": {
+        "priority": "VAZNO",
+        "category": "OSNOVNO"
+      }
+    },
+    {
+      "id": "m3n4o5p6-q7r8-9012-mnop-dddddddddddd",
+      "title": "Kupovina poklona",
+      "description": "Poklon za Markovu diplomu",
+      "dueDate": "2026-01-28T15:00:00",
+      "ownerUsername": "ivana",
+      "info": {
+        "priority": "ZADANO",
+        "category": "SHOPPING"
+      }
+    },
+    {
+      "id": "n4o5p6q7-r8s9-0123-nopq-eeeeeeeeeeee",
+      "title": "Ispit iz matematike",
+      "description": "Završni ispit - linearna algebra",
+      "dueDate": "2026-01-30T10:00:00",
+      "ownerUsername": "marko",
+      "info": {
+        "priority": "VAZNO",
+        "category": "POSAO"
+      }
+    },
+    {
+      "id": "o5p6q7r8-s9t0-1234-opqr-ffffffffffff",
+      "title": "Servis automobila",
+      "description": "Redovni godišnji servis",
+      "dueDate": "2026-02-05T08:30:00",
+      "ownerUsername": "petar",
+      "info": {
+        "priority": "ZADANO",
+        "category": "OSNOVNO"
+      }
+    }
+  ]
+}
