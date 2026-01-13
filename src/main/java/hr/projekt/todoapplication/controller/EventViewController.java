@@ -32,7 +32,7 @@ public class EventViewController {
 
         if(events == null || events.isEmpty()) {
             planner.getCurrentUser().ifPresentOrElse(
-                    user -> log.info("Korisnik {} nema događaja.", user.getUsername()),
+                    user -> log.info("Korisnik '{}' nema događaja.", user.getUsername()),
                     () -> log.warn("Nema prijavljenog korisnika."));
             return;
         }
@@ -41,10 +41,10 @@ public class EventViewController {
             try{
                 addEventCard(event);
             } catch (IOException e) {
-                log.error("Greska pri ucitavanju kartice za dogadaj {} : {}", event.getTitle(), e.getMessage(), e);
+                log.error("Greska pri ucitavanju kartice za dogadaj '{}' : '{}'", event.getTitle(), e.getMessage(), e);
             }
         }
-        planner.getCurrentUser().ifPresent(user -> log.info("Prikazano {} događaja za korisnika {}", events.size(), user.getUsername()));
+        planner.getCurrentUser().ifPresent(user -> log.info("Prikazano {} događaja za korisnika '{}'", events.size(), user.getUsername()));
     }
 
     private void addEventCard(Event event) throws IOException {

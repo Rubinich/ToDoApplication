@@ -44,7 +44,7 @@ public class AdminUser extends User {
      *
      * @param users kolekcija korisnika ciji se podaci analiziraju
      */
-    private void printStats(Collection<? extends User> users) {
+    /*private void printStats(Collection<? extends User> users) {
         if (users.isEmpty()) {
             log.info("Administrator {} pokusao generirati statistiku, ali nema korisnika.", username);
             System.out.println("Nema registriranih korisnika.");
@@ -98,5 +98,5 @@ public class AdminUser extends User {
                 System.out.printf("- %s -> %d dogadaj(a)%n", u.getUsername(), u.getEventCount()));
 
         log.info("Administrator {} prikazao statistiku korisnika i dogadaja.", username);
-    }
+    }*/
 }
