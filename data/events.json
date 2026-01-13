@@ -78,6 +78,17 @@
             "title": "Dolazak na faks"
         },
         {
+            "description": "adad",
+            "dueDate": "2026-01-15T12:00:00",
+            "id": "66ae1261-2ac1-4c87-af94-3b8a1b0516b8",
+            "info": {
+                "category": "POSAO",
+                "priority": "VAZNO"
+            },
+            "ownerUsername": "admin",
+            "title": "sredivanje baze podataka"
+        },
+        {
             "description": "Završni ispit - linearna algebra",
             "dueDate": "2026-01-30T10:00:00",
             "id": "n4o5p6q7-r8s9-0123-nopq-eeeeeeeeeeee",

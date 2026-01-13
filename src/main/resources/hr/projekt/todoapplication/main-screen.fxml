@@ -11,7 +11,7 @@
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="hr.projekt.todoapplication.controller.EventViewController">
     <top>
-            <fx:include fx:id="adminMenu" source="menu/admin-menu.fxml"/>
+        <VBox fx:id="menuContainer"/>
     </top>
    <center>
       <ScrollPane  fitToWidth="true" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">

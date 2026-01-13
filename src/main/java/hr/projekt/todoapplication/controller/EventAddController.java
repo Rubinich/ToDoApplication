@@ -5,10 +5,12 @@ import hr.projekt.todoapplication.model.event.Event;
 import hr.projekt.todoapplication.model.event.EventCategory;
 import hr.projekt.todoapplication.model.event.PriorityLevel;
 import hr.projekt.todoapplication.util.DialogUtil;
+import hr.projekt.todoapplication.util.MenuLoader;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.VBox;
 import javafx.util.StringConverter;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -23,10 +25,12 @@ public class EventAddController {
     @FXML private Spinner<Integer> minuteSpinner;
     @FXML private ComboBox<EventCategory> categoryCombo;
     @FXML private ComboBox<PriorityLevel> priorityCombo;
+    @FXML private VBox menuContainer;
     private Planner planner;
 
     @FXML
     public void initialize() {
+        MenuLoader.loadMenuForCurrentUser(menuContainer);
         planner = new Planner();
         SpinnerValueFactory<Integer> hourFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 23, 12);
         createTimeSpinnerFactory(hourFactory, hourSpinner);

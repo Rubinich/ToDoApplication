@@ -1,5 +1,6 @@
 package hr.projekt.todoapplication.repository;
 
+import hr.projekt.todoapplication.controller.LoginController;
 import hr.projekt.todoapplication.model.user.User;
 import hr.projekt.todoapplication.repository.Collection.UserCollection;
 import hr.projekt.todoapplication.repository.Storage.JsonStorage;
@@ -12,15 +13,24 @@ import java.util.*;
 
 //TODO moguce pretvori u interface za JsonRepository, XmlRepository i DataBaseRepository
 public class UserRepository {
+    private static final Logger logger = LoggerFactory.getLogger(UserRepository.class);
     private static final Logger log = LoggerFactory.getLogger(UserRepository.class);
     private static final Path USERS_FILE = Path.of("data/users.json");
     private final Storage<UserCollection> userStorage;
     private final Set<User> users;
+    private static UserRepository instance;
 
     public UserRepository() {
         this.userStorage = new JsonStorage<>(UserCollection.class);
         this.users = new HashSet<>();
         loadUsersFromStorage();
+    }
+
+    public static UserRepository getInstance() {
+        if(instance == null) {
+            instance = new UserRepository();
+        }
+        return instance;
     }
 
     private void loadUsersFromStorage() {
@@ -73,5 +83,33 @@ public class UserRepository {
 
     public int count() {
         return users.size();
+    }
+
+    public Optional<User> authenticate(String username, String password) {
+        logger.info("Authenticating: username={}, password={}", username, "***");
+        logger.info("Total users to check: {}", users.size());
+
+        if(username == null || password == null) {
+            logger.warn("Username or password is null");
+            return Optional.empty();
+        }
+
+        // Debug: ispiši sve korisnike
+        users.forEach(u ->
+                logger.debug("Checking user: {} with password: {}", u.getUsername(), u.getPassword())
+        );
+
+        Optional<User> result = users.stream()
+                .filter(user -> {
+                    boolean usernameMatch = user.getUsername().equals(username);
+                    boolean passwordMatch = user.getPassword().equals(password);
+                    logger.debug("User {}: username match={}, password match={}",
+                            user.getUsername(), usernameMatch, passwordMatch);
+                    return usernameMatch && passwordMatch;
+                })
+                .findFirst();
+
+        logger.info("Authentication result: {}", result.isPresent() ? "SUCCESS" : "FAILED");
+        return result;
     }
 }

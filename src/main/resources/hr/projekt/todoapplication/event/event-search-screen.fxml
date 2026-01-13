@@ -13,9 +13,10 @@
 <BorderPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hr.projekt.todoapplication.controller.EventSearchController">
     <top>
         <VBox>
-            <fx:include source="../menu/admin-menu.fxml" />
+            <VBox fx:id="menuContainer"/>
             <Label text="PRETRAGA DOGAĐAJA" />
             <HBox spacing="8">
+
                 <ComboBox fx:id="comboCriteria" prefHeight="25.0" prefWidth="215.0" />
                 <TextField fx:id="searchField" prefHeight="25.0" prefWidth="374.0" promptText="Upiši bilo što (naslov/opis/korisnik)..." />
                 <Button onAction="#applySearch" text="Pretraži" />

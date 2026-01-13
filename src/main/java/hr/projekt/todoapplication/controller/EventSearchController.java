@@ -1,15 +1,18 @@
 package hr.projekt.todoapplication.controller;
 
+import hr.projekt.todoapplication.ToDoApplication;
 import hr.projekt.todoapplication.model.Planner;
 import hr.projekt.todoapplication.model.event.Event;
 import hr.projekt.todoapplication.model.event.SearchCriteria;
 import hr.projekt.todoapplication.model.user.User;
 import hr.projekt.todoapplication.util.DialogUtil;
+import hr.projekt.todoapplication.util.MenuLoader;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.layout.VBox;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -29,6 +32,7 @@ public class EventSearchController{
     @FXML private TableColumn<Event, String> columnTitle;
     @FXML private TableColumn<Event, String> columnDesc;
     @FXML private TableColumn<Event, String> columnDate;
+    @FXML private VBox menuContainer;
 
     private final Planner planner = new Planner();
     private FilteredList<Event> filteredEvents;
@@ -40,7 +44,8 @@ public class EventSearchController{
 
     @FXML
     public void initialize() {
-        Optional<User> currentUser = planner.getCurrentUser();
+        MenuLoader.loadMenuForCurrentUser(menuContainer);
+        Optional<User> currentUser = ToDoApplication.getCurrentUser();
         currentUsername = currentUser.map(User::getUsername).orElse("Nepoznat");
 
         columnUser.setCellValueFactory(_ -> new ReadOnlyStringWrapper(currentUsername));
