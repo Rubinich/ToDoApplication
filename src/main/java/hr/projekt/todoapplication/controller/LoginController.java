@@ -15,10 +15,11 @@ public class LoginController {
     private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
     @FXML private TextField usernameField;
     @FXML private PasswordField passwordField;
-    private final UserRepository userRepository = UserRepository.getInstance();
+    private UserRepository userRepository;
 
     @FXML
     void initialize() {
+        this.userRepository = UserRepository.getInstance();
         passwordField.setOnAction(event -> handleLogin());
     }
 
@@ -34,8 +35,6 @@ public class LoginController {
 
         Optional<User> userOpt = userRepository.authenticate(username, password);
         if(userOpt.isPresent()) {
-            User user = userOpt.get();
-            ToDoApplication.setCurrentUser(user);
             ToDoApplication.showMainScreen();
         } else {
             DialogUtil.showError("Pogrešno korisničko ime ili lozinka!");

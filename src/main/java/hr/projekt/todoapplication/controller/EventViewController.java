@@ -1,9 +1,9 @@
 package hr.projekt.todoapplication.controller;
 
 import hr.projekt.todoapplication.ToDoApplication;
-import hr.projekt.todoapplication.model.Planner;
 import hr.projekt.todoapplication.model.event.Event;
-import hr.projekt.todoapplication.model.user.User;
+import hr.projekt.todoapplication.repository.EventRepository;
+import hr.projekt.todoapplication.repository.UserRepository;
 import hr.projekt.todoapplication.util.MenuLoader;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -13,7 +13,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
 
 public class EventViewController {
     private static final Logger log = LoggerFactory.getLogger(EventViewController.class);
@@ -21,21 +20,23 @@ public class EventViewController {
 
     @FXML private VBox eventContainer;
     @FXML private VBox menuContainer;
-    private Planner planner;
+    private EventRepository eventRepository;
+    private UserRepository userRepository;
 
     @FXML
     void initialize() {
         MenuLoader.loadMenuForCurrentUser(menuContainer);
-        planner = new Planner();
         loadEventsOnScreen();
+        this.eventRepository = EventRepository.getInstance();
+        this.userRepository = UserRepository.getInstance();
     }
 
     private void loadEventsOnScreen() {
         eventContainer.getChildren().clear();
-        List<Event> events = planner.getCurrentUserEvents();
+        List<Event> events = eventRepository.findEventsByUsername(userRepository.getCurrentUser().get().getUsername());
 
         if(events == null || events.isEmpty()) {
-            ToDoApplication.getCurrentUser().ifPresentOrElse(
+            userRepository.getCurrentUser().ifPresentOrElse(
                     user -> log.info("Korisnik '{}' nema događaja.", user.getUsername()),
                     () -> log.warn("Nema prijavljenog korisnika."));
             return;
@@ -48,7 +49,7 @@ public class EventViewController {
                 log.error("Greska pri ucitavanju kartice za dogadaj '{}' : '{}'", event.getTitle(), e.getMessage(), e);
             }
         }
-        ToDoApplication.getCurrentUser().ifPresent(user -> log.info("Prikazano {} događaja za korisnika '{}'", events.size(), user.getUsername()));
+        userRepository.getCurrentUser().ifPresent(user -> log.info("Prikazano {} događaja za korisnika '{}'", events.size(), user.getUsername()));
     }
 
     private void addEventCard(Event event) throws IOException {

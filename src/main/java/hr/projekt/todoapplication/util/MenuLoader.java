@@ -1,8 +1,8 @@
 package hr.projekt.todoapplication.util;
 
-import hr.projekt.todoapplication.ToDoApplication;
 import hr.projekt.todoapplication.model.user.AdminUser;
 import hr.projekt.todoapplication.model.user.User;
+import hr.projekt.todoapplication.repository.UserRepository;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.layout.Pane;
@@ -13,9 +13,10 @@ import java.util.Optional;
 
 public class MenuLoader {
     private static final Logger logger = LoggerFactory.getLogger(MenuLoader.class);
+    private static UserRepository userRepository = UserRepository.getInstance();
 
     public static void loadMenuForCurrentUser(Pane container) {
-        Optional<User> currentUser = ToDoApplication.getCurrentUser();
+        Optional<User> currentUser = userRepository.getCurrentUser();
         if(currentUser.isEmpty()) {
             logger.warn("No user logged in, cannot load menu");
             return;

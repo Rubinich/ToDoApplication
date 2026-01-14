@@ -40,3 +40,5 @@ build/
 
 ### Fajlovi ###
 /logs
+/data/events.json
+/data/users.json

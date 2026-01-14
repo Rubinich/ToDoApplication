@@ -1,10 +1,10 @@
 package hr.projekt.todoapplication.controller;
 
-import hr.projekt.todoapplication.ToDoApplication;
-import hr.projekt.todoapplication.model.Planner;
 import hr.projekt.todoapplication.model.event.Event;
 import hr.projekt.todoapplication.model.event.SearchCriteria;
 import hr.projekt.todoapplication.model.user.User;
+import hr.projekt.todoapplication.repository.EventRepository;
+import hr.projekt.todoapplication.repository.UserRepository;
 import hr.projekt.todoapplication.util.DialogUtil;
 import hr.projekt.todoapplication.util.MenuLoader;
 import javafx.beans.property.ReadOnlyStringWrapper;
@@ -34,9 +34,10 @@ public class EventSearchController{
     @FXML private TableColumn<Event, String> columnDate;
     @FXML private VBox menuContainer;
 
-    private final Planner planner = new Planner();
     private FilteredList<Event> filteredEvents;
     private String currentUsername = "";
+    private UserRepository userRepository;
+    private EventRepository eventRepository;
 
     private static final DateTimeFormatter DTF = DateTimeFormatter.ofPattern("dd.MM.yyyy. HH:mm");
     private static final DateTimeFormatter DF = DateTimeFormatter.ofPattern("dd.MM.yyyy.");
@@ -44,8 +45,10 @@ public class EventSearchController{
 
     @FXML
     public void initialize() {
+        this.userRepository = UserRepository.getInstance();
+        this.eventRepository = EventRepository.getInstance();
         MenuLoader.loadMenuForCurrentUser(menuContainer);
-        Optional<User> currentUser = ToDoApplication.getCurrentUser();
+        Optional<User> currentUser = userRepository.getCurrentUser();
         currentUsername = currentUser.map(User::getUsername).orElse("Nepoznat");
 
         columnUser.setCellValueFactory(_ -> new ReadOnlyStringWrapper(currentUsername));
@@ -53,7 +56,7 @@ public class EventSearchController{
         columnDesc.setCellValueFactory(param -> new ReadOnlyStringWrapper(Optional.ofNullable(param.getValue().getDescription()).orElse("")));
         columnDate.setCellValueFactory(param -> new ReadOnlyStringWrapper(Optional.ofNullable(param.getValue().getDueDate()).map(DTF::format).orElse("")));
 
-        List<Event> events = planner.getCurrentUserEvents();
+        List<Event> events = eventRepository.findEventsByUsername(userRepository.getCurrentUser().get().getUsername());
         filteredEvents = new FilteredList<>(FXCollections.observableArrayList(events));
         table.setItems(filteredEvents);
         table.setPlaceholder(new Label(""));

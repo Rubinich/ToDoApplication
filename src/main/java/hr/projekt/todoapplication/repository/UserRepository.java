@@ -14,18 +14,17 @@ import java.util.*;
 //TODO moguce pretvori u interface za JsonRepository, XmlRepository i DataBaseRepository
 public class UserRepository {
     private static final Logger logger = LoggerFactory.getLogger(UserRepository.class);
-    private static final Logger log = LoggerFactory.getLogger(UserRepository.class);
     private static final Path USERS_FILE = Path.of("data/users.json");
+
     private final Storage<UserCollection> userStorage;
-    private final Set<User> users;
     private static UserRepository instance;
 
-    public UserRepository() {
-        this.userStorage = new JsonStorage<>(UserCollection.class);
-        this.users = new HashSet<>();
-        loadUsersFromStorage();
-    }
+    private Optional<User> currentUser = Optional.empty();
 
+    private UserRepository() {
+        this.userStorage = new JsonStorage<>(UserCollection.class);
+    }
+    // pazi za dretve
     public static UserRepository getInstance() {
         if(instance == null) {
             instance = new UserRepository();
@@ -33,83 +32,91 @@ public class UserRepository {
         return instance;
     }
 
-    private void loadUsersFromStorage() {
-        try {
-            Optional<UserCollection> collection = userStorage.read(USERS_FILE);
-            if (collection.isPresent()) {
-                UserCollection userCollection = collection.get();
-                if (userCollection.users != null && !userCollection.users.isEmpty()) {
-                    users.addAll(userCollection.users);
-                    log.info("Učitano {} korisnika", users.size());
-                }
-            }
-        } catch (IOException | ClassNotFoundException e) {
-            log.error("Greska pri ucitavanju korisnika: {}", e.getMessage(), e);
-        }
-    }
-
-    public void addUserToRam(User user) {
+    public void addUser(User user) {
         if(user == null)
-            throw new IllegalArgumentException("Korisnik ne moze biti null");
-        users.add(user);
-        addUsersToStorage();
-        log.info("Dodan korisnik: {}", user.getUsername());
-    }
-
-    private void addUsersToStorage() {
-        try{
-            UserCollection collection = new UserCollection();
-            collection.users = new HashSet<>(users);
+            throw new IllegalArgumentException("Korisnik ne može biti null");
+        try {
+            UserCollection collection = userStorage.read(USERS_FILE).orElse(new UserCollection());
+            boolean exists = collection.users.stream().anyMatch(u -> u.getUsername().equals(user.getUsername()));
+            if(exists)
+                throw new IllegalArgumentException("Korisnik već postoji: " + user.getUsername());
+            collection.users.add(user);
             userStorage.write(USERS_FILE, collection);
-            log.debug("Spremljeno {} korisnika u {}", users.size(), USERS_FILE);
-        } catch(IOException e) {
-            log.error("Greska pri spremanju korisnika: {}", e.getMessage(), e);
-            throw new RuntimeException("Nije moguće spremiti korisnike", e);
+            logger.info("Dodan novi korisnik: {}", user.getUsername());
+
+        } catch (IOException | ClassNotFoundException e) {
+            logger.error("Greška pri dodavanju korisnika: {}", e.getMessage());
+            throw new RuntimeException("Nije moguće dodati korisnika", e);
         }
     }
 
     public Optional<User> findByUsername(String username) {
-        if(username == null || username.trim().isEmpty()) {
+        if(username == null || username.trim().isEmpty())
+            return Optional.empty();
+        try {
+            Optional<UserCollection> collection = userStorage.read(USERS_FILE);
+            if(collection.isEmpty())
+                return Optional.empty();
+            return collection.get().users.stream()
+                    .filter(u -> u.getUsername().equalsIgnoreCase(username))
+                    .findFirst();
+
+        } catch (IOException | ClassNotFoundException e) {
+            logger.error("Greška pri traženju korisnika: {}", e.getMessage());
             return Optional.empty();
         }
-        return users.stream()
-                .filter(user -> user.getUsername().equalsIgnoreCase(username))
-                .findFirst();
+    }
+
+    public Optional<User> getCurrentUser() {
+        return currentUser;
+    }
+
+    public void logout() {
+        if(currentUser != null) {
+            logger.info("Odjava korisnika: {}", currentUser.get().getUsername());
+            this.currentUser = Optional.empty();
+        }
     }
 
     public Set<User> findAll() {
-        return Collections.unmodifiableSet(users);
-    }
-
-    public int count() {
-        return users.size();
+        try {
+            Optional<UserCollection> collection = userStorage.read(USERS_FILE);
+            return collection.map(c -> new HashSet<>(c.users)).orElse(new HashSet<>());
+        } catch (IOException | ClassNotFoundException e) {
+            logger.error("Greška pri učitavanju svih korisnika: {}", e.getMessage());
+            return new HashSet<>();
+        }
     }
 
     public Optional<User> authenticate(String username, String password) {
-        logger.info("Authenticating: username={}, password={}", username, "***");
-        logger.info("Total users to check: {}", users.size());
-
         if(username == null || password == null) {
             logger.warn("Username or password is null");
             return Optional.empty();
         }
 
-        // Debug: ispiši sve korisnike
-        users.forEach(u ->
-                logger.debug("Checking user: {} with password: {}", u.getUsername(), u.getPassword())
-        );
+        try{
+            Optional<UserCollection> collection = userStorage.read(USERS_FILE);
+            if(collection.isEmpty()) {
+                logger.warn("Datoteka korisnika ne postoji");
+                return Optional.empty();
+            }
+            Optional<User> foundUser = collection.get().users.stream()
+                    .filter(user -> user.getUsername().equals(username) && user.getPassword().equals(password))
+                    .findFirst();
+            if(foundUser.isPresent()) {
+                this.currentUser = foundUser;
+                logger.info("Uspješna prijava: {}", username);
+            } else {
+                logger.warn("Neuspješna prijava: {}", username);
+            }
+            return foundUser;
+        } catch (IOException | ClassNotFoundException e) {
+            logger.error("Greška pri autentifikaciji: {}", e.getMessage());
+            return Optional.empty();
+        }
+    }
 
-        Optional<User> result = users.stream()
-                .filter(user -> {
-                    boolean usernameMatch = user.getUsername().equals(username);
-                    boolean passwordMatch = user.getPassword().equals(password);
-                    logger.debug("User {}: username match={}, password match={}",
-                            user.getUsername(), usernameMatch, passwordMatch);
-                    return usernameMatch && passwordMatch;
-                })
-                .findFirst();
-
-        logger.info("Authentication result: {}", result.isPresent() ? "SUCCESS" : "FAILED");
-        return result;
+    public void setCurrentUser(Optional<User> currentUser) {
+        this.currentUser = currentUser;
     }
 }
