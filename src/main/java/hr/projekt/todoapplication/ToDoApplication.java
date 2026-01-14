@@ -1,20 +1,13 @@
 package hr.projekt.todoapplication;
 
-import hr.projekt.todoapplication.controller.LoginController;
-import hr.projekt.todoapplication.model.user.AdminUser;
-import hr.projekt.todoapplication.model.user.User;
-import hr.projekt.todoapplication.repository.UserRepository;
 import hr.projekt.todoapplication.util.DialogUtil;
-import hr.projekt.todoapplication.util.SessionManager;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import java.io.IOException;
-import java.util.Optional;
 
 public class ToDoApplication extends Application {
     private static final Logger logger = LoggerFactory.getLogger(ToDoApplication.class);
@@ -45,6 +38,7 @@ public class ToDoApplication extends Application {
             mainStage.show();
 
         } catch (IOException e) {
+            logger.error("Greška pri učitavanju glavnog ekrana", e);
             DialogUtil.showError("Greška pri učitavanju glavnog ekrana");
         }
     }

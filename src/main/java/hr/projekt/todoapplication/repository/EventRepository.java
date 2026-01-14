@@ -16,19 +16,19 @@ public class EventRepository {
     private static final Logger log = LoggerFactory.getLogger(EventRepository.class);
     private static final Path EVENTS_FILE = Path.of("data/events.json");
 
-    private final Storage<EventCollection> eventStorage;
-    private final Map<String, Event> currentUserEvents;
-
-    private final UserRepository userRepository;
     private static EventRepository instance;
+    private final Storage<EventCollection> eventStorage;
+    private final UserRepository userRepository;
 
+    private List<Event> currentUserEvents;
 
     private EventRepository() {
-        this.userRepository = UserRepository.getInstance();
         this.eventStorage = new JsonStorage<>(EventCollection.class);
-        this.currentUserEvents = new HashMap<>();
+        this.userRepository = UserRepository.getInstance();
+        this.currentUserEvents = new ArrayList<>();
+        log.info("EventRepository inicijaliziran");
     }
-    // paziti za dretve
+
     public static EventRepository getInstance() {
         if(instance == null) {
             instance = new EventRepository();
@@ -39,47 +39,101 @@ public class EventRepository {
     public void loadEventsForCurrentUser() {
         Optional<User> currentUser = userRepository.getCurrentUser();
         if(currentUser.isEmpty()) {
-            log.warn("Nema prijavljenog korisnika, ne mogu učitati događaje");
+            log.error("Nema prijavljenog korisnika!");
             return;
         }
+
         String username = currentUser.get().getUsername();
         this.currentUserEvents.clear();
-
-        try{
+        try {
             Optional<EventCollection> collection = eventStorage.read(EVENTS_FILE);
-            if(collection.isPresent()) {
-                collection.get().events.stream()
-                        .filter(event -> username.equals(event.getOwnerUsername()))
-                        .forEach(event -> currentUserEvents.put(event.getId(), event));
-                log.info("Učitano {} događaja za korisnika: {}", currentUserEvents.size(), username);
+            if(collection.isEmpty()) {
+                log.warn("JSON datoteka je prazna ili ne postoji");
+                return;
             }
-        } catch(ClassNotFoundException | IOException e) {
-            log.error("Greska pri ucitavanju dogadaja: {}", e.getMessage(), e);
+            List<Event> userEvents = collection.get().events.stream()
+                    .filter(e -> {
+                        boolean matches = username.equals(e.getOwnerUsername());
+                        if(matches) {
+                            log.debug("Pronađen događaj: {} (owner: {})", e.getTitle(), e.getOwnerUsername());
+                        }
+                        return matches;
+                    })
+                    .collect(Collectors.toList());
+            for(Event e : userEvents) {
+                currentUserEvents.add(e);
+                log.debug("Dodan u memoriju: {} (ID: {})", e.getTitle(), e.getId());
+            }
+        } catch (IOException | ClassNotFoundException e) {
+            log.error("Greška pri učitavanju događaja: {}", e.getMessage(), e);
         }
     }
 
     public void addEvent(Event event) {
-        try{
+        if(event == null) {
+            throw new IllegalArgumentException("Događaj ne može biti null");
+        }
+
+        try {
             EventCollection collection = eventStorage.read(EVENTS_FILE).orElse(new EventCollection());
+
             collection.events.add(event);
             eventStorage.write(EVENTS_FILE, collection);
 
             Optional<User> currentUser = userRepository.getCurrentUser();
             if(currentUser.isPresent() && event.getOwnerUsername().equals(currentUser.get().getUsername()))
-                currentUserEvents.put(event.getId(), event);
-            log.info("Dodan događaj: {} (vlasnik: {})", event.getTitle(), event.getOwnerUsername());
+                currentUserEvents.add(event);
+
+            log.info("Događaj spremljen: {} (vlasnik: {})", event.getTitle(), event.getOwnerUsername());
+
         } catch (IOException | ClassNotFoundException e) {
-            throw new RuntimeException(e);
+            log.error("Greška pri dodavanju događaja: {}", e.getMessage());
+            throw new RuntimeException("Nije moguće dodati događaj", e);
         }
     }
 
-    public List<Event> findEventsByUsername(String username) {
-        return currentUserEvents.values().stream()
-                .filter(e -> e.getOwnerUsername().equals(username))
-                .collect(Collectors.toList());
+    public List<Event> getCurrentUserEvents() {
+        if(currentUserEvents.isEmpty())
+            loadEventsForCurrentUser();
+
+        List<Event> result = new ArrayList<>(currentUserEvents);
+        log.info("Vraćam {} događaja", result.size());
+        return result;
     }
 
-    public void clearCurrentUserEvents(){
-        this.currentUserEvents.clear();
+    public List<Event> findEventsByUsername(String username) {
+        if(username == null || username.trim().isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        Optional<User> currentUser = userRepository.getCurrentUser();
+        if(currentUser.isPresent() && username.equals(currentUser.get().getUsername())) {
+            return getCurrentUserEvents();
+        }
+
+        try {
+            Optional<EventCollection> collection = eventStorage.read(EVENTS_FILE);
+            if(collection.isEmpty()) {
+                return Collections.emptyList();
+            }
+
+            return collection.get().events.stream()
+                    .filter(e -> username.equals(e.getOwnerUsername()))
+                    .collect(Collectors.toList());
+
+        } catch (IOException | ClassNotFoundException e) {
+            log.error("Greška pri traženju događaja: {}", e.getMessage());
+            return Collections.emptyList();
+        }
+    }
+
+    public List<Event> findAll() {
+        try {
+            Optional<EventCollection> collection = eventStorage.read(EVENTS_FILE);
+            return collection.map(c -> new ArrayList<>(c.events)).orElse(new ArrayList<>());
+        } catch (IOException | ClassNotFoundException e) {
+            log.error("Greška pri učitavanju svih događaja: {}", e.getMessage());
+            return new ArrayList<>();
+        }
     }
 }

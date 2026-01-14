@@ -50,23 +50,6 @@ public class UserRepository {
         }
     }
 
-    public Optional<User> findByUsername(String username) {
-        if(username == null || username.trim().isEmpty())
-            return Optional.empty();
-        try {
-            Optional<UserCollection> collection = userStorage.read(USERS_FILE);
-            if(collection.isEmpty())
-                return Optional.empty();
-            return collection.get().users.stream()
-                    .filter(u -> u.getUsername().equalsIgnoreCase(username))
-                    .findFirst();
-
-        } catch (IOException | ClassNotFoundException e) {
-            logger.error("Greška pri traženju korisnika: {}", e.getMessage());
-            return Optional.empty();
-        }
-    }
-
     public Optional<User> getCurrentUser() {
         return currentUser;
     }
@@ -114,9 +97,5 @@ public class UserRepository {
             logger.error("Greška pri autentifikaciji: {}", e.getMessage());
             return Optional.empty();
         }
-    }
-
-    public void setCurrentUser(Optional<User> currentUser) {
-        this.currentUser = currentUser;
     }
 }

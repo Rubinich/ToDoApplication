@@ -38,6 +38,18 @@ public class Event implements Serializable {
         this.ownerUsername = builder.ownerUsername;
     }
 
+    public String getOwnerUsername() {
+        return ownerUsername;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
     public void setTitle(String title) {
         this.title = title;
     }
@@ -54,20 +66,8 @@ public class Event implements Serializable {
         this.info = info;
     }
 
-    public String getOwnerUsername() {
-        return ownerUsername;
-    }
-
     public void setOwnerUsername(String ownerUsername) {
         this.ownerUsername = ownerUsername;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     /**
@@ -92,15 +92,11 @@ public class Event implements Serializable {
          * @param description opis dogadaja
          * @param dueDate datum i vrijeme odrzavanja dogadaja
          */
-        public EventBuilder(String title, String description, LocalDateTime dueDate) {
+        public EventBuilder(String title, String description, LocalDateTime dueDate, String ownerUsername) {
             this.title = title;
             this.description = description;
             this.dueDate = dueDate;
-        }
-
-        private EventBuilder owner(String ownerUsername) {
             this.ownerUsername = ownerUsername;
-            return this;
         }
 
         /**

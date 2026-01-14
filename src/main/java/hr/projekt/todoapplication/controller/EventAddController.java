@@ -4,6 +4,7 @@ import hr.projekt.todoapplication.model.event.Event;
 import hr.projekt.todoapplication.model.event.EventCategory;
 import hr.projekt.todoapplication.model.event.PriorityLevel;
 import hr.projekt.todoapplication.repository.EventRepository;
+import hr.projekt.todoapplication.repository.UserRepository;
 import hr.projekt.todoapplication.util.DialogUtil;
 import hr.projekt.todoapplication.util.MenuLoader;
 import javafx.collections.FXCollections;
@@ -26,11 +27,11 @@ public class EventAddController {
     @FXML private ComboBox<EventCategory> categoryCombo;
     @FXML private ComboBox<PriorityLevel> priorityCombo;
     @FXML private VBox menuContainer;
-    private EventRepository repository;
+    private final EventRepository eventRepository = EventRepository.getInstance();
+    private final UserRepository userRepository = UserRepository.getInstance();
 
     @FXML
     public void initialize() {
-        this.repository = EventRepository.getInstance();
         MenuLoader.loadMenuForCurrentUser(menuContainer);
         SpinnerValueFactory<Integer> hourFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 23, 12);
         createTimeSpinnerFactory(hourFactory, hourSpinner);
@@ -81,12 +82,12 @@ public class EventAddController {
             return;
         }
 
-        Event newEvent = new Event.EventBuilder(title, description, date)
+        Event newEvent = new Event.EventBuilder(title, description, date, userRepository.getCurrentUser().get().getUsername())
                 .category(categoryCombo.getValue())
                 .priority(priorityCombo.getValue())
                 .build();
         try {
-            repository.addEvent(newEvent);
+            eventRepository.addEvent(newEvent);
             DialogUtil.showInfo("Događaj uspješno kreiran i spremljen!");
             clearFields();
         } catch (IllegalStateException e) {
