@@ -1,4 +1,4 @@
-package hr.projekt.todoapplication.repository.Storage;
+package hr.projekt.todoapplication.repository.storage;
 
 import java.io.*;
 import java.nio.file.Files;

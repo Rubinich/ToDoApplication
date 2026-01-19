@@ -34,6 +34,10 @@ public class AdminUser extends User {
         this.userType = UserType.ADMIN;
     }
 
+    public AdminUser(String id, String username, String password, UserType userType) {
+        super(id, username, password, userType);
+    }
+
     /**
      * Ispisuje statistiku o korisnicima sustava koristeci Stream API.
      * <p>Prikazuje:

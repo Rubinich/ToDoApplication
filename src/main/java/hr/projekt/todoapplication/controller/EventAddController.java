@@ -16,6 +16,7 @@ import javafx.util.StringConverter;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
 public class EventAddController {
@@ -33,6 +34,7 @@ public class EventAddController {
     @FXML
     public void initialize() {
         MenuLoader.loadMenuForCurrentUser(menuContainer);
+        setupDatePickerConfig();
         SpinnerValueFactory<Integer> hourFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 23, 12);
         createTimeSpinnerFactory(hourFactory, hourSpinner);
 
@@ -43,6 +45,34 @@ public class EventAddController {
         categoryCombo.setValue(EventCategory.OSNOVNO);
         priorityCombo.setItems(FXCollections.observableArrayList(PriorityLevel.values()));
         priorityCombo.setValue(PriorityLevel.ZADANO);
+    }
+
+    private void setupDatePickerConfig() {
+        dateField.setEditable(false);
+        String pattern = "dd.MM.yyyy.";
+        DateTimeFormatter formatter = java.time.format.DateTimeFormatter.ofPattern(pattern);
+        dateField.setConverter(new StringConverter<LocalDate>() {
+            @Override
+            public String toString(LocalDate date) {
+                if (date != null) {
+                    return formatter.format(date);
+                } else {
+                    return "";
+                }
+            }
+
+            @Override
+            public LocalDate fromString(String string) {
+                if (string != null && !string.isEmpty()) {
+                    try {
+                        return LocalDate.parse(string, formatter);
+                    } catch (Exception e) {
+                        return null;
+                    }
+                } else
+                    return null;
+            }
+        });
     }
 
     private void createTimeSpinnerFactory(SpinnerValueFactory<Integer> factory, Spinner<Integer> spinner) {
@@ -82,12 +112,12 @@ public class EventAddController {
             return;
         }
 
-        Event newEvent = new Event.EventBuilder(title, description, date, userRepository.getCurrentUser().get().getUsername())
+        Event newEvent = new Event.EventBuilder(title, description, date, userRepository.getCurrentUser().get().getId())
                 .category(categoryCombo.getValue())
                 .priority(priorityCombo.getValue())
                 .build();
         try {
-            eventRepository.addEvent(newEvent);
+            eventRepository.saveEvent(newEvent);
             DialogUtil.showInfo("Događaj uspješno kreiran i spremljen!");
             clearFields();
         } catch (IllegalStateException e) {

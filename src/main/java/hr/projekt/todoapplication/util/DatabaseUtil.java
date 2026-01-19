@@ -17,7 +17,7 @@ public class DatabaseUtil {
     private static final String USER_ID = "ID";
     private static final String USER_USERNAME = "USERNAME";
 
-    public static Connection createConnection() throws IOException, DatabaseException {
+    public static Connection createConnection() throws DatabaseException {
         try(var reader = new FileReader(DATABASE_FILE)) {
             var properties = new Properties();
             properties.load(reader);
@@ -27,7 +27,7 @@ public class DatabaseUtil {
             var password = properties.getProperty("password");
 
             return DriverManager.getConnection(url, username, password);
-        } catch (SQLException e) {
+        } catch (SQLException | IOException e) {
             throw new DatabaseException(e);
         }
     }
@@ -37,6 +37,19 @@ public class DatabaseUtil {
             conn.close();
         } catch (SQLException e) {
             throw new DatabaseException(e);
+        }
+    }
+
+    public static boolean testConnection() {
+        try {
+            logger.info("Testiram konekciju na H2 bazu...");
+            Connection conn = createConnection();
+            logger.info("Konekcija na bazu uspješna!");
+            closeConnection(conn);
+            return true;
+        } catch (Exception e) {
+            logger.error("Konekcija na bazu neuspješna: {}", e.getMessage());
+            return false;
         }
     }
 }

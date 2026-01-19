@@ -1,4 +1,4 @@
-package hr.projekt.todoapplication.repository.Collection;
+package hr.projekt.todoapplication.repository.collection;
 
 import hr.projekt.todoapplication.model.event.Event;
 import java.io.Serializable;

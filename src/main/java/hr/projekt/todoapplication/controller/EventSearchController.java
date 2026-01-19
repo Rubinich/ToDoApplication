@@ -56,7 +56,7 @@ public class EventSearchController{
         columnDesc.setCellValueFactory(param -> new ReadOnlyStringWrapper(Optional.ofNullable(param.getValue().getDescription()).orElse("")));
         columnDate.setCellValueFactory(param -> new ReadOnlyStringWrapper(Optional.ofNullable(param.getValue().getDueDate()).map(DTF::format).orElse("")));
 
-        List<Event> events = eventRepository.findEventsByUsername(userRepository.getCurrentUser().get().getUsername());
+        List<Event> events = eventRepository.findEventsByUserId(userRepository.getCurrentUser().get().getId());
         filteredEvents = new FilteredList<>(FXCollections.observableArrayList(events));
         table.setItems(filteredEvents);
         table.setPlaceholder(new Label(""));

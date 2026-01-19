@@ -9,6 +9,8 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
 import java.util.Optional;
 
 public class LoginController {
@@ -33,11 +35,14 @@ public class LoginController {
             return;
         }
 
-        Optional<User> userOpt = userRepository.authenticate(username, password);
-        if(userOpt.isPresent()) {
-            ToDoApplication.showMainScreen();
-        } else {
-            DialogUtil.showError("Pogrešno korisničko ime ili lozinka!");
+
+        try {
+            Optional<User> userOpt = userRepository.authenticate(username, password);
+            if (userOpt.isPresent())
+                ToDoApplication.showMainScreen();
+        }
+        catch(IOException e) {
+                DialogUtil.showError("Pogrešno korisničko ime ili lozinka!");
         }
     }
 }

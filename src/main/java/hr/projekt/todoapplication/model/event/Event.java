@@ -18,7 +18,7 @@ public class Event implements Serializable {
     private String description;
     private LocalDateTime dueDate;
     private EventInfo info;
-    private String ownerId;
+    private String userId;
 
     public Event() {
         this.id = UUID.randomUUID().toString();
@@ -35,11 +35,11 @@ public class Event implements Serializable {
         this.description = builder.description;
         this.dueDate = builder.dueDate;
         this.info = new EventInfo(builder.priority, builder.category);
-        this.ownerId = builder.ownerId;
+        this.userId = builder.ownerId;
     }
 
-    public String getOwnerId() {
-        return ownerId;
+    public String getUserId() {
+        return userId;
     }
 
     public String getId() {
@@ -66,8 +66,8 @@ public class Event implements Serializable {
         this.info = info;
     }
 
-    public void setOwnerId(String ownerId) {
-        this.ownerId = ownerId;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     /**
@@ -78,6 +78,7 @@ public class Event implements Serializable {
      * </p>
      */
     public static class EventBuilder {
+        private String id;
         private final String title;
         private final String description;
         private final LocalDateTime dueDate;
@@ -118,6 +119,11 @@ public class Event implements Serializable {
          */
         public EventBuilder priority(PriorityLevel priority) {
             this.priority = priority;
+            return this;
+        }
+
+        public EventBuilder id(String id) {
+            this.id = id;
             return this;
         }
 
@@ -171,7 +177,7 @@ public class Event implements Serializable {
                 "\nDatum: " + dueDate +
                 "\nKategorija: " + info.category() +
                 "\nPrioritet: " + info.priority() +
-                "\nVlasnik: " + ownerId +
+                "\nVlasnik: " + userId +
                 "\n----------------------------";
     }
 }

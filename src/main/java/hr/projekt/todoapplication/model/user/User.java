@@ -48,6 +48,16 @@ public abstract class User implements Serializable {
         this.userType = this instanceof AdminUser ? UserType.ADMIN : UserType.USER;
         log.debug("Kreiran novi korisnik: {}", username);
     }
+
+    // prilikom citanja iz baze
+    protected User(String id, String username, String password, UserType userType) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.userType = userType;
+    }
+
+
     public UserType getUserType() {
         return userType;
     }
@@ -95,5 +105,9 @@ public abstract class User implements Serializable {
 
     public String getId() {
         return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }

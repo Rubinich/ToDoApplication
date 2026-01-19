@@ -23,13 +23,17 @@ public class DialogUtil {
         alert.showAndWait();
     }
 
-    public static boolean showConfirn(String msg) {
+    public static boolean showConfirm(String msg) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Potvrda");
         alert.setHeaderText(null);
         alert.setContentText(msg);
 
-        Optional<ButtonType> confirmation = alert.showAndWait();
-        return confirmation.isPresent() && confirmation.get() == ButtonType.YES;
+        ButtonType daButton = new ButtonType("Da");
+        ButtonType neButton = new ButtonType("Ne");
+        alert.getButtonTypes().setAll(daButton, neButton);
+
+        Optional<ButtonType> result = alert.showAndWait();
+        return result.isPresent() && result.get() == daButton;
     }
 }

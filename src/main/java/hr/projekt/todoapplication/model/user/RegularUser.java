@@ -21,4 +21,8 @@ public class RegularUser extends User {
         super(username);
         this.userType = UserType.USER;
     }
+
+    public RegularUser(String id, String username, String password, UserType userType) {
+        super(id, username, password, userType);
+    }
 }
