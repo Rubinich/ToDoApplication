@@ -22,6 +22,7 @@ public class AdminUser extends User {
     private static final Logger log = LoggerFactory.getLogger(AdminUser.class);
     public AdminUser() {
         super();
+        this.userType = UserType.ADMIN;
     }
     /**
      * Stvara novog administratora s definiranim korisnickim imenom i lozinkom.
@@ -30,6 +31,7 @@ public class AdminUser extends User {
      */
     public AdminUser(String username) {
         super(username);
+        this.userType = UserType.ADMIN;
     }
 
     /**

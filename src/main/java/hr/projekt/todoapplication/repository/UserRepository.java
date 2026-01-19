@@ -1,6 +1,5 @@
 package hr.projekt.todoapplication.repository;
 
-import hr.projekt.todoapplication.controller.LoginController;
 import hr.projekt.todoapplication.model.user.User;
 import hr.projekt.todoapplication.repository.Collection.UserCollection;
 import hr.projekt.todoapplication.repository.Storage.JsonStorage;

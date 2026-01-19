@@ -1,32 +1,136 @@
 {
     "events": [
         {
-            "id": "8566aeea-0eb3-466c-ac75-d08e52b2d335"
-        },
-        {
-            "id": "d17212dd-8abe-4856-a750-27412567834c"
-        },
-        {
-            "description": "af",
-            "dueDate": "2026-01-27T12:00:00",
-            "id": "4ab6e242-d862-4fc7-8bbd-3cb38c2b8330",
+            "id": "550e8400-e29b-41d4-a716-446655440001",
+            "title": "Tim sastanak",
+            "description": "Planiranje Q1 2026 ciljeva i strategije",
+            "dueDate": "2026-01-22T14:00:00",
             "info": {
-                "category": "OSNOVNO",
-                "priority": "ZADANO"
+                "priority": "VAZNO",
+                "category": "POSAO"
             },
-            "ownerUsername": "admin",
-            "title": "fs"
+            "userId": "a1b2c3d4-e5f6-4a5b-8c9d-0e1f2a3b4c5d"
         },
         {
-            "description": "afDSAFF",
-            "dueDate": "2026-01-28T12:00:00",
-            "id": "2b458378-31ba-4700-83b2-8e68a9b28a6b",
+            "id": "550e8400-e29b-41d4-a716-446655440002",
+            "title": "Kupovina namirnica",
+            "description": "Lista: mlijeko, kruh, voće, povrće, jaja",
+            "dueDate": "2026-01-20T10:30:00",
             "info": {
-                "category": "OSNOVNO",
-                "priority": "ZADANO"
+                "priority": "ZADANO",
+                "category": "SHOPPING"
             },
-            "ownerUsername": "admin",
-            "title": "saadff"
+            "userId": "a1b2c3d4-e5f6-4a5b-8c9d-0e1f2a3b4c5d"
+        },
+        {
+            "id": "550e8400-e29b-41d4-a716-446655440003",
+            "title": "Godišnji pregled",
+            "description": "Zakazati termin za godišnji zdravstveni pregled",
+            "dueDate": "2026-02-02T09:00:00",
+            "info": {
+                "priority": "VAZNO",
+                "category": "OSOBNO"
+            },
+            "userId": "a1b2c3d4-e5f6-4a5b-8c9d-0e1f2a3b4c5d"
+        },
+        {
+            "id": "550e8400-e29b-41d4-a716-446655440004",
+            "title": "Trening u teretani",
+            "description": "Kardio i weightlifting - 60 minuta",
+            "dueDate": "2026-01-20T18:00:00",
+            "info": {
+                "priority": "VAZNO",
+                "category": "OSOBNO"
+            },
+            "userId": "b2c3d4e5-f6a7-4b5c-8d9e-0f1a2b3c4d5e"
+        },
+        {
+            "id": "550e8400-e29b-41d4-a716-446655440005",
+            "title": "Predaja projekta",
+            "description": "Finalna verzija diplomskog rada - apsolutni deadline!",
+            "dueDate": "2026-01-26T23:59:00",
+            "info": {
+                "priority": "VAZNO",
+                "category": "POSAO"
+            },
+            "userId": "b2c3d4e5-f6a7-4b5c-8d9e-0f1a2b3c4d5e"
+        },
+        {
+            "id": "550e8400-e29b-41d4-a716-446655440006",
+            "title": "Servis auta",
+            "description": "Redovni servis - zamjena ulja i filtera",
+            "dueDate": "2026-01-24T11:00:00",
+            "info": {
+                "priority": "ZADANO",
+                "category": "OSOBNO"
+            },
+            "userId": "b2c3d4e5-f6a7-4b5c-8d9e-0f1a2b3c4d5e"
+        },
+        {
+            "id": "550e8400-e29b-41d4-a716-446655440007",
+            "title": "Doktor - kontrolni pregled",
+            "description": "Specijalistički pregled kod dr. Horvat u bolnici",
+            "dueDate": "2026-01-24T15:30:00",
+            "info": {
+                "priority": "VAZNO",
+                "category": "OSOBNO"
+            },
+            "userId": "c3d4e5f6-a7b8-4c5d-8e9f-0a1b2c3d4e5f"
+        },
+        {
+            "id": "550e8400-e29b-41d4-a716-446655440008",
+            "title": "Rođendan kod Maje",
+            "description": "Proslava 30. rođendana - donijeti poklon i tortu",
+            "dueDate": "2026-01-29T19:00:00",
+            "info": {
+                "priority": "ZADANO",
+                "category": "OSOBNO"
+            },
+            "userId": "c3d4e5f6-a7b8-4c5d-8e9f-0a1b2c3d4e5f"
+        },
+        {
+            "id": "550e8400-e29b-41d4-a716-446655440009",
+            "title": "Prezentacija projekta",
+            "description": "Priprema i izvođenje prezentacije pred klijentom ABC d.o.o.",
+            "dueDate": "2026-01-23T14:00:00",
+            "info": {
+                "priority": "VAZNO",
+                "category": "POSAO"
+            },
+            "userId": "c3d4e5f6-a7b8-4c5d-8e9f-0a1b2c3d4e5f"
+        },
+        {
+            "id": "550e8400-e29b-41d4-a716-446655440010",
+            "title": "Konzultacije sa studentima",
+            "description": "Office hours - pomoć pri izradi seminarskih radova",
+            "dueDate": "2026-01-21T13:00:00",
+            "info": {
+                "priority": "ZADANO",
+                "category": "POSAO"
+            },
+            "userId": "d4e5f6a7-b8c9-4d5e-8f9a-0b1c2d3e4f5a"
+        },
+        {
+            "id": "550e8400-e29b-41d4-a716-446655440011",
+            "title": "Shopping centar",
+            "description": "Kupovina odjeće i obuće za ljeto - City centar",
+            "dueDate": "2026-01-25T16:00:00",
+            "info": {
+                "priority": "IGNORIRAJ",
+                "category": "SHOPPING"
+            },
+            "userId": "e5f6a7b8-c9d0-4e5f-8a9b-0c1d2e3f4a5b"
+        },
+        {
+            "id": "550e8400-e29b-41d4-a716-446655440012",
+            "title": "Online tečaj",
+            "description": "Nastavak Java Spring Boot kursa - modul 5",
+            "dueDate": "2026-01-20T20:00:00",
+            "info": {
+                "priority": "VAZNO",
+                "category": "OSOBNO"
+            },
+            "userId": "e5f6a7b8-c9d0-4e5f-8a9b-0c1d2e3f4a5b"
         }
     ]
 }

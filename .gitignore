@@ -40,3 +40,7 @@ build/
 
 ### Fajlovi ###
 /logs
+
+### Database ###
+database.properties
+src/main/resources/database.properties

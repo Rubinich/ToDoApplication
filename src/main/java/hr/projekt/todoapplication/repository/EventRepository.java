@@ -43,7 +43,7 @@ public class EventRepository {
             return;
         }
 
-        String username = currentUser.get().getUsername();
+        String userId = currentUser.get().getId();
         this.currentUserEvents.clear();
         try {
             Optional<EventCollection> collection = eventStorage.read(EVENTS_FILE);
@@ -53,9 +53,9 @@ public class EventRepository {
             }
             List<Event> userEvents = collection.get().events.stream()
                     .filter(e -> {
-                        boolean matches = username.equals(e.getOwnerUsername());
+                        boolean matches = userId.equals(e.getOwnerId());
                         if(matches) {
-                            log.debug("Pronađen događaj: {} (owner: {})", e.getTitle(), e.getOwnerUsername());
+                            log.debug("Pronađen događaj: {} (owner: {})", e.getTitle(), e.getOwnerId());
                         }
                         return matches;
                     })
@@ -81,10 +81,10 @@ public class EventRepository {
             eventStorage.write(EVENTS_FILE, collection);
 
             Optional<User> currentUser = userRepository.getCurrentUser();
-            if(currentUser.isPresent() && event.getOwnerUsername().equals(currentUser.get().getUsername()))
+            if(currentUser.isPresent() && event.getOwnerId().equals(currentUser.get().getId()))
                 currentUserEvents.add(event);
 
-            log.info("Događaj spremljen: {} (vlasnik: {})", event.getTitle(), event.getOwnerUsername());
+            log.info("Događaj spremljen: {} (vlasnik: {})", event.getTitle(), event.getOwnerId());
 
         } catch (IOException | ClassNotFoundException e) {
             log.error("Greška pri dodavanju događaja: {}", e.getMessage());
@@ -118,7 +118,7 @@ public class EventRepository {
             }
 
             return collection.get().events.stream()
-                    .filter(e -> username.equals(e.getOwnerUsername()))
+                    .filter(e -> username.equals(e.getOwnerId()))
                     .collect(Collectors.toList());
 
         } catch (IOException | ClassNotFoundException e) {

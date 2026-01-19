@@ -15,13 +15,19 @@
     </properties>
 
     <dependencies>
+        <!-- za h2 database -->
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>2.4.240</version>
+        </dependency>
         <!-- za json -->
         <dependency>
             <groupId>jakarta.json.bind</groupId>
             <artifactId>jakarta.json.bind-api</artifactId>
             <version>3.0.0</version>
         </dependency>
-        <!-- Jakarta JSON Processing API - DODANO -->
+        <!-- Jakarta JSON Processing API -->
         <dependency>
             <groupId>jakarta.json</groupId>
             <artifactId>jakarta.json-api</artifactId>

@@ -10,6 +10,7 @@ package hr.projekt.todoapplication.model.user;
 public class RegularUser extends User {
     public RegularUser() {
         super();
+        this.userType = UserType.USER;
     }
     /**
      * Stvara novog obicnog korisnika s definiranim korisnickim imenom i lozinkom.
@@ -18,5 +19,6 @@ public class RegularUser extends User {
      */
     public RegularUser(String username) {
         super(username);
+        this.userType = UserType.USER;
     }
 }

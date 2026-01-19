@@ -18,7 +18,7 @@ public class Event implements Serializable {
     private String description;
     private LocalDateTime dueDate;
     private EventInfo info;
-    private String ownerUsername;
+    private String ownerId;
 
     public Event() {
         this.id = UUID.randomUUID().toString();
@@ -35,11 +35,11 @@ public class Event implements Serializable {
         this.description = builder.description;
         this.dueDate = builder.dueDate;
         this.info = new EventInfo(builder.priority, builder.category);
-        this.ownerUsername = builder.ownerUsername;
+        this.ownerId = builder.ownerId;
     }
 
-    public String getOwnerUsername() {
-        return ownerUsername;
+    public String getOwnerId() {
+        return ownerId;
     }
 
     public String getId() {
@@ -66,8 +66,8 @@ public class Event implements Serializable {
         this.info = info;
     }
 
-    public void setOwnerUsername(String ownerUsername) {
-        this.ownerUsername = ownerUsername;
+    public void setOwnerId(String ownerId) {
+        this.ownerId = ownerId;
     }
 
     /**
@@ -83,7 +83,7 @@ public class Event implements Serializable {
         private final LocalDateTime dueDate;
         private PriorityLevel priority = PriorityLevel.ZADANO;
         private EventCategory category = EventCategory.OSNOVNO;
-        private String ownerUsername;
+        private String ownerId;
 
         /**
          * Inicijalizira osnovne podatke o dogadaju.
@@ -92,11 +92,11 @@ public class Event implements Serializable {
          * @param description opis dogadaja
          * @param dueDate datum i vrijeme odrzavanja dogadaja
          */
-        public EventBuilder(String title, String description, LocalDateTime dueDate, String ownerUsername) {
+        public EventBuilder(String title, String description, LocalDateTime dueDate, String ownerId) {
             this.title = title;
             this.description = description;
             this.dueDate = dueDate;
-            this.ownerUsername = ownerUsername;
+            this.ownerId = ownerId;
         }
 
         /**
@@ -171,7 +171,7 @@ public class Event implements Serializable {
                 "\nDatum: " + dueDate +
                 "\nKategorija: " + info.category() +
                 "\nPrioritet: " + info.priority() +
-                "\nVlasnik: " + ownerUsername +
+                "\nVlasnik: " + ownerId +
                 "\n----------------------------";
     }
 }
