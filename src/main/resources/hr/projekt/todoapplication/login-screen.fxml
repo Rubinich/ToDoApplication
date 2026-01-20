@@ -1,13 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hr.projekt.todoapplication.controller.LoginController">
+<BorderPane maxHeight="-Infinity" maxWidth="700.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hr.projekt.todoapplication.controller.LoginController">
    <center>
-      <VBox alignment="CENTER" prefWidth="300.0" spacing="10.0" BorderPane.alignment="CENTER">
+      <VBox alignment="CENTER" maxWidth="500.0" prefWidth="300.0" spacing="10.0" BorderPane.alignment="CENTER">
          <TextField fx:id="usernameField" prefHeight="30.0" prefWidth="300.0" />
          <PasswordField fx:id="passwordField" prefHeight="30.0" prefWidth="300.0" />
          <HBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="300.0" spacing="10.0">
@@ -17,30 +22,40 @@
                </padding>
                <font>
                   <Font size="13.0" />
-               </font></Button>
-            <Button mnemonicParsing="false" text="Registracija">
+               </font>
+            </Button>
+            <Button mnemonicParsing="false" onAction="#handleRegister" text="Registracija">
                <padding>
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                </padding>
                <font>
                   <Font size="13.0" />
-               </font></Button>
+               </font>
+            </Button>
          </HBox>
+         <BorderPane.margin>
+            <Insets left="50.0" right="50.0" />
+         </BorderPane.margin>
          <padding>
-            <Insets bottom="20.0" left="25.0" right="25.0" top="20.0" />
+            <Insets left="50.0" right="50.0" />
          </padding>
       </VBox>
    </center>
    <top>
-      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+      <VBox alignment="CENTER" prefHeight="119.0" prefWidth="600.0" BorderPane.alignment="BOTTOM_CENTER">
          <Label style="-fx-font-size: 18px; -fx-font-weight: bold;" text="Aplikacija za planiranje događaja">
             <font>
                <Font size="18.0" />
-            </font></Label>
+            </font>
+         </Label>
          <Label text="Organiziraj svoj dan">
             <font>
                <Font size="14.0" />
-            </font></Label>
+            </font>
+         </Label>
+         <BorderPane.margin>
+            <Insets top="50.0" />
+         </BorderPane.margin>
       </VBox>
    </top>
 </BorderPane>

@@ -42,5 +42,5 @@ build/
 /logs
 
 ### Database ###
-database.properties
+/database.properties
 /src/main/resources/database.properties

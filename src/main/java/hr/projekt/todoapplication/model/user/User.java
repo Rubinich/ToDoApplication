@@ -57,6 +57,12 @@ public abstract class User implements Serializable {
         this.userType = userType;
     }
 
+    protected User(String username, String password) {
+        this.id = UUID.randomUUID().toString();
+        this.username = username;
+        this.password = password;
+    }
+
 
     public UserType getUserType() {
         return userType;

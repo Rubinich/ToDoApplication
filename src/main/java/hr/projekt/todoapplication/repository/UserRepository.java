@@ -32,18 +32,20 @@ public class UserRepository {
         return instance;
     }
 
-    public void saveUser(User user) {
+    public boolean saveUser(User user) {
         try {
             UserCollection collection = jsonStorage.read(USERS_FILE).orElse(new UserCollection());
             boolean exists = collection.users.stream().anyMatch(u -> u.getUsername().equals(user.getUsername()));
             if(exists)
-                throw new IllegalArgumentException("Korisnik već postoji: " + user.getUsername());
+                return false;
             collection.users.add(user);  // program
             jsonStorage.write(USERS_FILE, collection);  // json
             databaseStorage.save(user);  // baza podataka
+            return true;
 
         } catch (IOException | ClassNotFoundException e) {
-            throw new RuntimeException("Nije moguće dodati korisnika", e);
+            logger.error("Kritična greška: {}", e.getMessage());
+            return false;
         }
     }
 

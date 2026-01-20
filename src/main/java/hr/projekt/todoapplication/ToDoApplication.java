@@ -25,8 +25,14 @@ public class ToDoApplication extends Application {
         mainStage = stage;
 
         if (!DatabaseUtil.testConnection()) {
-            showDatabaseErrorDialog();
-            return;
+            DialogUtil.showError("Molimo provjerite:\n\n" +
+                    "1. Je li H2 server pokrenut?\n" +
+                    "   Pokrenite: java -jar h2*.jar\n\n" +
+                    "2. Je li baza dostupna na:\n" +
+                    "   jdbc:h2:tcp://localhost/~/Java-2026\n\n" +
+                    "3. Provjerite username i password u database.properties\n\n" +
+                    "Aplikacija će se sada zatvoriti.");
+            Platform.exit();
         }
 
         FXMLLoader fxmlLoader = new FXMLLoader(ToDoApplication.class.getResource("login-screen.fxml"));
@@ -50,24 +56,5 @@ public class ToDoApplication extends Application {
             logger.error("Greška pri učitavanju glavnog ekrana", e);
             DialogUtil.showError("Greška pri učitavanju glavnog ekrana");
         }
-    }
-
-    private void showDatabaseErrorDialog() {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Greška konekcije na bazu");
-        alert.setHeaderText("Nije moguće spojiti na H2 bazu podataka");
-        alert.setContentText(
-                "Molimo provjerite:\n\n" +
-                        "1. Je li H2 server pokrenut?\n" +
-                        "   Pokrenite: java -jar h2*.jar\n\n" +
-                        "2. Je li baza dostupna na:\n" +
-                        "   jdbc:h2:tcp://localhost/~/Java-2026\n\n" +
-                        "3. Provjerite username i password u database.properties\n\n" +
-                        "Aplikacija će se sada zatvoriti."
-        );
-
-        alert.showAndWait();
-        Platform.exit();
-        System.exit(1);
     }
 }

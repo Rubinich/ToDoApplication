@@ -1,7 +1,9 @@
 package hr.projekt.todoapplication.controller;
 
 import hr.projekt.todoapplication.ToDoApplication;
+import hr.projekt.todoapplication.model.user.RegularUser;
 import hr.projekt.todoapplication.model.user.User;
+import hr.projekt.todoapplication.model.user.UserType;
 import hr.projekt.todoapplication.repository.UserRepository;
 import hr.projekt.todoapplication.util.DialogUtil;
 import javafx.fxml.FXML;
@@ -30,19 +32,44 @@ public class LoginController {
         String username = usernameField.getText().trim();
         String password = passwordField.getText();
 
-        if(username.isEmpty() || password.isEmpty()) {
+        if(validateInput(username, password)) {
+            try {
+                Optional<User> userOpt = userRepository.authenticate(username, password);
+                if (userOpt.isPresent()) {
+                    ToDoApplication.showMainScreen();
+                } else {
+                    DialogUtil.showError("""
+                            Korisnik s unesenim podacima nije pronađen!
+                            
+                            Molimo provjerite:
+                            • Jeste li ispravno unijeli korisničko ime
+                            • Jeste li ispravno unijeli lozinku
+                            Ako ste novi korisnik, molimo registrirajte se.""");
+                }
+            } catch (IOException e) {
+                logger.error("Greška prilikom autentifikacije: {}", e.getMessage(), e);
+                DialogUtil.showError("Došlo je do greške prilikom prijave.\nMolimo pokušajte ponovno.");
+            }
+        }
+    }
+
+    @FXML
+    private void handleRegister() {
+        String username = usernameField.getText().trim();
+        String password = passwordField.getText();
+
+        if (userRepository.saveUser(new RegularUser(username, password))) {
+            DialogUtil.showInfo("Registracija uspješna!");
+        } else {
+            DialogUtil.showError("Registracija nije uspjela. Korisničko ime je zauzeto.");
+        }
+    }
+
+    private boolean validateInput(String username, String password) {
+        if (username.isEmpty() || password.isEmpty()) {
             DialogUtil.showError("Molimo unesite korisničko ime i lozinku.");
-            return;
+            return false;
         }
-
-
-        try {
-            Optional<User> userOpt = userRepository.authenticate(username, password);
-            if (userOpt.isPresent())
-                ToDoApplication.showMainScreen();
-        }
-        catch(IOException e) {
-                DialogUtil.showError("Pogrešno korisničko ime ili lozinka!");
-        }
+        return true;
     }
 }

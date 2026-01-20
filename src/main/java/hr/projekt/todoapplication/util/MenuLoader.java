@@ -17,19 +17,15 @@ public class MenuLoader {
 
     public static void loadMenuForCurrentUser(Pane container) {
         Optional<User> currentUser = userRepository.getCurrentUser();
-        if(currentUser.isEmpty()) {
-            logger.warn("No user logged in, cannot load menu");
-            return;
-        }
-
         String fxmlMenu = currentUser.get() instanceof AdminUser ? "/hr/projekt/todoapplication/menu/admin-menu.fxml" : "/hr/projekt/todoapplication/menu/user-menu.fxml";
+
         try{
             FXMLLoader loader = new FXMLLoader(MenuLoader.class.getResource(fxmlMenu));
             Parent menu = loader.load();
             container.getChildren().setAll(menu);
             logger.debug("Učitani meni: {}", fxmlMenu);
         } catch (IOException e) {
-            logger.error("Error loading menu: {}", fxmlMenu, e);
+            logger.error("Greska ucitavanje menija: {}", fxmlMenu, e);
             throw new RuntimeException(e);
         }
     }

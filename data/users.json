@@ -1,34 +1,40 @@
 {
-  "users": [
-    {
-      "@type": "admin",
-      "id": "a1b2c3d4-e5f6-4a5b-8c9d-0e1f2a3b4c5d",
-      "username": "admin",
-      "password": "admin123"
-    },
-    {
-      "@type": "regular",
-      "id": "b2c3d4e5-f6a7-4b5c-8d9e-0f1a2b3c4d5e",
-      "username": "marko",
-      "password": "marko123"
-    },
-    {
-      "@type": "regular",
-      "id": "c3d4e5f6-a7b8-4c5d-8e9f-0a1b2c3d4e5f",
-      "username": "ana",
-      "password": "ana123"
-    },
-    {
-      "@type": "admin",
-      "id": "d4e5f6a7-b8c9-4d5e-8f9a-0b1c2d3e4f5a",
-      "username": "petar",
-      "password": "petar123"
-    },
-    {
-      "@type": "regular",
-      "id": "e5f6a7b8-c9d0-4e5f-8a9b-0c1d2e3f4a5b",
-      "username": "ivana",
-      "password": "ivana123"
-    }
-  ]
+    "users": [
+        {
+            "@type": "regular",
+            "id": "c3d4e5f6-a7b8-4c5d-8e9f-0a1b2c3d4e5f",
+            "password": "ana123",
+            "username": "ana"
+        },
+        {
+            "@type": "admin",
+            "id": "d4e5f6a7-b8c9-4d5e-8f9a-0b1c2d3e4f5a",
+            "password": "petar123",
+            "username": "petar"
+        },
+        {
+            "@type": "admin",
+            "id": "a1b2c3d4-e5f6-4a5b-8c9d-0e1f2a3b4c5d",
+            "password": "admin123",
+            "username": "admin"
+        },
+        {
+            "@type": "regular",
+            "id": "e5f6a7b8-c9d0-4e5f-8a9b-0c1d2e3f4a5b",
+            "password": "ivana123",
+            "username": "ivana"
+        },
+        {
+            "@type": "regular",
+            "id": "027bcd75-a220-4937-a7ac-3de816e313b9",
+            "password": "admin2",
+            "username": "admin2"
+        },
+        {
+            "@type": "regular",
+            "id": "b2c3d4e5-f6a7-4b5c-8d9e-0f1a2b3c4d5e",
+            "password": "marko123",
+            "username": "marko"
+        }
+    ]
 }
