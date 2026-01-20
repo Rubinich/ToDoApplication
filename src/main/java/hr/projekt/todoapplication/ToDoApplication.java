@@ -23,20 +23,20 @@ public class ToDoApplication extends Application {
     public void start(Stage stage) throws IOException {
         mainStage = stage;
 
-        if (!DatabaseUtil.testConnection()) {
-            DialogUtil.showError("""
-                    Molimo provjerite:
-                    
-                    1. Je li H2 server pokrenut?
-                       Pokrenite: java -jar h2*.jar
-                    2. Je li baza dostupna na:
-                       jdbc:h2:tcp://localhost/~/Java-2026
-                    3. Provjerite username i password u database.properties
-                    
-                    Aplikacija će se zatvoriti.""");
-            Platform.exit();
-            System.exit(1);
-        }
+//        if (!DatabaseUtil.testConnection()) {
+//            DialogUtil.showError("""
+//                    Molimo provjerite:
+//
+//                    1. Je li H2 server pokrenut?
+//                       Pokrenite: java -jar h2*.jar
+//                    2. Je li baza dostupna na:
+//                       jdbc:h2:tcp://localhost/~/Java-2026
+//                    3. Provjerite username i password u database.properties
+//
+//                    Aplikacija će se zatvoriti.""");
+//            Platform.exit();
+//            System.exit(1);
+//        }
 
         FXMLLoader fxmlLoader = new FXMLLoader(ToDoApplication.class.getResource("login-screen.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 1024, 768);
