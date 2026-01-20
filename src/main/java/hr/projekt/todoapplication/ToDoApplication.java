@@ -6,7 +6,6 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,14 +24,18 @@ public class ToDoApplication extends Application {
         mainStage = stage;
 
         if (!DatabaseUtil.testConnection()) {
-            DialogUtil.showError("Molimo provjerite:\n\n" +
-                    "1. Je li H2 server pokrenut?\n" +
-                    "   Pokrenite: java -jar h2*.jar\n\n" +
-                    "2. Je li baza dostupna na:\n" +
-                    "   jdbc:h2:tcp://localhost/~/Java-2026\n\n" +
-                    "3. Provjerite username i password u database.properties\n\n" +
-                    "Aplikacija će se sada zatvoriti.");
+            DialogUtil.showError("""
+                    Molimo provjerite:
+                    
+                    1. Je li H2 server pokrenut?
+                       Pokrenite: java -jar h2*.jar
+                    2. Je li baza dostupna na:
+                       jdbc:h2:tcp://localhost/~/Java-2026
+                    3. Provjerite username i password u database.properties
+                    
+                    Aplikacija će se zatvoriti.""");
             Platform.exit();
+            System.exit(1);
         }
 
         FXMLLoader fxmlLoader = new FXMLLoader(ToDoApplication.class.getResource("login-screen.fxml"));

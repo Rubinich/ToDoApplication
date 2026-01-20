@@ -8,8 +8,6 @@ import hr.projekt.todoapplication.model.user.UserType;
 import hr.projekt.todoapplication.util.DatabaseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.io.IOException;
 import java.sql.*;
 import java.util.HashSet;
 import java.util.Optional;
@@ -40,7 +38,7 @@ public class UserDatabaseDao implements UserDao{
             statement.executeUpdate();
 
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new DatabaseException(e);
         }
     }
 
@@ -101,7 +99,7 @@ public class UserDatabaseDao implements UserDao{
             statement.executeUpdate();
 
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new DatabaseException(e);
         }
     }
 
@@ -114,7 +112,7 @@ public class UserDatabaseDao implements UserDao{
             statement.executeUpdate();
 
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new DatabaseException(e);
         }
     }
 
@@ -124,11 +122,9 @@ public class UserDatabaseDao implements UserDao{
         String password = rs.getString(COLUMN_PASSWORD);
         UserType userType = UserType.fromString(rs.getString(COLUMN_USER_TYPE));
 
-        User user = switch(userType) {
+        return switch(userType) {
             case ADMIN -> new AdminUser(userId, username, password, userType);
             case USER -> new RegularUser(userId, username, password, userType);
         };
-
-        return user;
     }
 }
