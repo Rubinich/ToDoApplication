@@ -14,6 +14,8 @@ public class DatabaseUtil {
     private static final Logger logger = LoggerFactory.getLogger(DatabaseUtil.class);
     private static final String DATABASE_FILE = "src/main/resources/database.properties";
 
+    private DatabaseUtil() {}
+
     public static Connection createConnection() throws DatabaseException {
         try(var reader = new FileReader(DATABASE_FILE)) {
             var properties = new Properties();

@@ -11,7 +11,7 @@
               <MenuItem mnemonicParsing="false" onAction="#openHome" text="Početak" />
               <MenuItem mnemonicParsing="false" onAction="#openEventSearch" text="Pretaži" />
               <MenuItem mnemonicParsing="false" onAction="#openAddEvent" text="Dodaj" />
-              <MenuItem mnemonicParsing="false" onAction="#odjaviSe" text="Odjavi se" />
+              <MenuItem mnemonicParsing="false" onAction="#logoutEvent" text="Odjavi se" />
           </Menu>
       </MenuBar>
 </AnchorPane>

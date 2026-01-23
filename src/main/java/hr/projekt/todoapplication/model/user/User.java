@@ -1,5 +1,6 @@
 package hr.projekt.todoapplication.model.user;
 
+import hr.projekt.todoapplication.util.PasswordUtil;
 import jakarta.json.bind.annotation.JsonbSubtype;
 import jakarta.json.bind.annotation.JsonbTransient;
 import jakarta.json.bind.annotation.JsonbTypeInfo;
@@ -25,7 +26,7 @@ import java.util.UUID;
         }
 )
 public abstract class User implements Serializable {
-    private static final Logger log = LoggerFactory.getLogger(User.class);
+    private static final Logger logger = LoggerFactory.getLogger(User.class);
 
     protected String id;
     protected String username;
@@ -34,19 +35,6 @@ public abstract class User implements Serializable {
     protected UserType userType;
 
     protected User() {
-        this.id = UUID.randomUUID().toString();
-    }
-
-    /**
-     * Stvara novog korisnika s definiranim korisnickim imenom i lozinkom.
-     *
-     * @param username korisnicko ime
-     */
-    protected User(String username) {
-        this.id = UUID.randomUUID().toString();
-        this.username = username;
-        this.userType = this instanceof AdminUser ? UserType.ADMIN : UserType.USER;
-        log.debug("Kreiran novi korisnik: {}", username);
     }
 
     // prilikom citanja iz baze
@@ -60,7 +48,7 @@ public abstract class User implements Serializable {
     protected User(String username, String password) {
         this.id = UUID.randomUUID().toString();
         this.username = username;
-        this.password = password;
+        this.password = PasswordUtil.hashPassword(password);
     }
 
 

@@ -19,9 +19,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public class EventSearchController{
 
@@ -36,8 +34,6 @@ public class EventSearchController{
 
     private FilteredList<Event> filteredEvents;
     private String currentUsername = "";
-    private UserRepository userRepository;
-    private EventRepository eventRepository;
 
     private static final DateTimeFormatter DTF = DateTimeFormatter.ofPattern("dd.MM.yyyy. HH:mm");
     private static final DateTimeFormatter DF = DateTimeFormatter.ofPattern("dd.MM.yyyy.");
@@ -45,8 +41,8 @@ public class EventSearchController{
 
     @FXML
     public void initialize() {
-        this.userRepository = UserRepository.getInstance();
-        this.eventRepository = EventRepository.getInstance();
+        UserRepository userRepository = UserRepository.getInstance();
+        EventRepository eventRepository = EventRepository.getInstance();
         MenuLoader.loadMenuForCurrentUser(menuContainer);
         Optional<User> currentUser = userRepository.getCurrentUser();
         currentUsername = currentUser.map(User::getUsername).orElse("Nepoznat");
@@ -56,7 +52,9 @@ public class EventSearchController{
         columnDesc.setCellValueFactory(param -> new ReadOnlyStringWrapper(Optional.ofNullable(param.getValue().getDescription()).orElse("")));
         columnDate.setCellValueFactory(param -> new ReadOnlyStringWrapper(Optional.ofNullable(param.getValue().getDueDate()).map(DTF::format).orElse("")));
 
-        List<Event> events = eventRepository.findEventsByUserId(userRepository.getCurrentUser().get().getId());
+        List<Event> events = userRepository.getCurrentUser()
+                .map(user -> eventRepository.findEventsByUserId(user.getId()))
+                .orElse(Collections.emptyList());
         filteredEvents = new FilteredList<>(FXCollections.observableArrayList(events));
         table.setItems(filteredEvents);
         table.setPlaceholder(new Label(""));
@@ -102,50 +100,59 @@ public class EventSearchController{
     }
 
     private boolean matchTitle(Event event, String searchLower) {
-        String title = event.getTitle();
-        if (title == null)
-            return false;
-        return title.toLowerCase().contains(searchLower);
+        return Optional.ofNullable(event.getTitle())
+                .map(String::toLowerCase)
+                .map(title -> title.contains(searchLower))
+                .orElse(false);
     }
 
     private boolean matchDescription(Event event, String searchLower) {
-        String description = event.getDescription();
-        if (description == null)
-            return false;
-        String descLower = description.toLowerCase();
         List<String> tokens = Arrays.stream(searchLower.split("\\s+"))
-                .map(String::trim)
-                .filter(t -> t.length() >= 2)
-                .toList();
-
-        return tokens.isEmpty() || tokens.stream().allMatch(descLower::contains);
+            .filter(t -> t.length() > 2)
+            .toList();
+        return Optional.ofNullable(event.getDescription())
+                .filter(description -> tokens.isEmpty() || tokens.stream().allMatch(description.toLowerCase()::contains))
+                .isPresent();
     }
 
-    private boolean matchDateTime(LocalDateTime dt, String input) {
-        if (dt == null)
-            return false;
-        return tryParseDateTime(dt, input);
+    private boolean matchDateTime(LocalDateTime dateTime, String input) {
+        return Optional.ofNullable(dateTime)
+                .map(dt -> tryParseDateTime(dt, input))
+                .orElse(false);
     }
 
-    private boolean tryParseDateTime(LocalDateTime dt, String input) {
-        // dd.MM.yyyy. HH:mm
+    private boolean tryParseDateTime(LocalDateTime dateTime, String input) {
+        if(tryParseAsDateTime(dateTime, input))
+            return true;
+        if(tryParseAsDate(dateTime, input))
+            return true;
+        return tryParseAsTime(dateTime, input);
+    }
+
+    private boolean tryParseAsTime(LocalDateTime dateTime, String input) {
         try {
-            LocalDateTime parsed = LocalDateTime.parse(input, DTF);
-            return dt.equals(parsed);
+            LocalTime parsed = LocalTime.parse(input, DTF);
+            return dateTime.toLocalTime().equals(parsed);
         } catch (DateTimeParseException _) {
-            // dd.MM.yyyy.
-            try {
-                LocalDate parsed = LocalDate.parse(input, DF);
-                return dt.toLocalDate().equals(parsed);
-            } catch (DateTimeParseException _) {
-                // HH:mm
-                try {
-                    LocalTime parsed = LocalTime.parse(input, TF);
-                    return dt.toLocalTime().equals(parsed);
-                } catch (DateTimeParseException _) {
-                    return false;
-                }
-            }
+            return false;
+        }
+    }
+
+    private boolean tryParseAsDate(LocalDateTime dateTime, String input) {
+        try {
+            LocalDate parsed = LocalDate.parse(input, DF);
+            return dateTime.toLocalDate().equals(parsed);
+        } catch (DateTimeParseException _) {
+            return false;
+        }
+    }
+
+    private boolean tryParseAsDateTime(LocalDateTime dateTime, String input) {
+        try {
+            LocalDateTime parsed = LocalDateTime.parse(input, TF);
+            return dateTime.equals(parsed);
+        } catch (DateTimeParseException e) {
+            return false;
         }
     }
 

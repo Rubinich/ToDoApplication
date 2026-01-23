@@ -17,6 +17,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Optional;
 
 public class EventAddController {
@@ -50,27 +51,25 @@ public class EventAddController {
     private void setupDatePickerConfig() {
         dateField.setEditable(false);
         String pattern = "dd.MM.yyyy.";
-        DateTimeFormatter formatter = java.time.format.DateTimeFormatter.ofPattern(pattern);
-        dateField.setConverter(new StringConverter<LocalDate>() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
+        dateField.setConverter(new StringConverter<>() {
             @Override
             public String toString(LocalDate date) {
-                if (date != null) {
-                    return formatter.format(date);
-                } else {
-                    return "";
-                }
+                return Optional.ofNullable(date)
+                        .map(formatter::format)
+                        .orElse("");
             }
 
             @Override
             public LocalDate fromString(String string) {
-                if (string != null && !string.isEmpty()) {
-                    try {
-                        return LocalDate.parse(string, formatter);
-                    } catch (Exception e) {
-                        return null;
-                    }
-                } else
-                    return null;
+                if (string == null || string.isBlank()) {
+                    return LocalDate.now();
+                }
+                try {
+                    return LocalDate.parse(string, formatter);
+                } catch (DateTimeParseException _) {
+                    return LocalDate.now();
+                }
             }
         });
     }
@@ -112,19 +111,18 @@ public class EventAddController {
             return;
         }
 
-        Event newEvent = new Event.EventBuilder(title, description, date, userRepository.getCurrentUser().get().getId())
-                .category(categoryCombo.getValue())
-                .priority(priorityCombo.getValue())
-                .build();
-        try {
-            eventRepository.saveEvent(newEvent);
-            DialogUtil.showInfo("Događaj uspješno kreiran i spremljen!");
-            clearFields();
-        } catch (IllegalStateException e) {
-            DialogUtil.showError("Nema prijavljenog korisnika!");
-        } catch (Exception e) {
-            DialogUtil.showError("Greška pri dodavanju događaja: " + e.getMessage());
-        }
+        userRepository.getCurrentUser().ifPresentOrElse(
+                user -> {
+                    Event newEvent = new Event.EventBuilder(title, description, date, user.getId())
+                            .category(categoryCombo.getValue())
+                            .priority(priorityCombo.getValue())
+                            .build();
+                    eventRepository.saveEvent(newEvent);
+                    DialogUtil.showInfo("Događaj uspješno kreiran i spremljen!");
+                    clearFields();
+                },
+                () -> DialogUtil.showError("Nema prijavljenog korisnika")
+        );
     }
 
     private void clearFields() {
@@ -141,7 +139,9 @@ public class EventAddController {
         return new StringConverter<>() {
             @Override
             public String toString(Integer value) {
-                return value == null ? "00" : String.format("%02d", value);
+                return Optional.ofNullable(value)
+                        .map(v -> String.format("%02d", v))
+                        .orElse("00");
             }
 
             @Override

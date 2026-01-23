@@ -15,6 +15,12 @@
     </properties>
 
     <dependencies>
+        <!-- za hash lozinke -->
+        <dependency>
+            <groupId>org.mindrot</groupId>
+            <artifactId>jbcrypt</artifactId>
+            <version>0.4</version>
+        </dependency>
         <!-- za h2 database -->
         <dependency>
             <groupId>com.h2database</groupId>

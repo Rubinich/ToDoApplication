@@ -6,6 +6,7 @@ import hr.projekt.todoapplication.model.user.RegularUser;
 import hr.projekt.todoapplication.model.user.User;
 import hr.projekt.todoapplication.model.user.UserType;
 import hr.projekt.todoapplication.util.DatabaseUtil;
+import hr.projekt.todoapplication.util.PasswordUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.sql.*;
@@ -19,7 +20,7 @@ public class UserDatabaseDao implements UserDao{
     private static final String UPDATE_USER_QUERY = "UPDATE USERS SET USERNAME = ?, PASSWORD = ?, USER_TYPE = ? WHERE ID = ?";
     private static final String DELETE_USER_QUERY = "DELETE FROM USERS WHERE ID = ?";
     private static final String SELECT_ALL_USERS_QUERY = "SELECT ID, USERNAME, PASSWORD, USER_TYPE FROM USERS";
-    private static final String SELECT_USERS_BY_USERNAME_PASSWORD = "SELECT ID, USERNAME, PASSWORD, USER_TYPE FROM USERS WHERE USERNAME = ? AND PASSWORD = ?";
+    private static final String SELECT_USERS_BY_USERNAME_PASSWORD = "SELECT ID, USERNAME, PASSWORD, USER_TYPE FROM USERS WHERE USERNAME = ?";
 
     private static final String COLUMN_ID = "ID";
     private static final String COLUMN_USERNAME = "USERNAME";
@@ -52,14 +53,13 @@ public class UserDatabaseDao implements UserDao{
         try(Connection conn = DatabaseUtil.createConnection();
             PreparedStatement statement = conn.prepareStatement(SELECT_USERS_BY_USERNAME_PASSWORD)){
             statement.setString(1, username);
-            statement.setString(2, password);
             ResultSet rs = statement.executeQuery();
 
             if(rs.next()) {
                 User user = mapResultSetToUser(rs);
-                return Optional.of(user);
+                if (PasswordUtil.checkPassword(password, user.getPassword()))
+                    return Optional.of(user);
             }
-
             logger.warn("Autentifikacija neuspješna za: {}", username);
 
         } catch (SQLException e) {
@@ -121,6 +121,7 @@ public class UserDatabaseDao implements UserDao{
         String username = rs.getString(COLUMN_USERNAME);
         String password = rs.getString(COLUMN_PASSWORD);
         UserType userType = UserType.fromString(rs.getString(COLUMN_USER_TYPE));
+        logger.info("hash password je: {}", password);
 
         return switch(userType) {
             case ADMIN -> new AdminUser(userId, username, password, userType);

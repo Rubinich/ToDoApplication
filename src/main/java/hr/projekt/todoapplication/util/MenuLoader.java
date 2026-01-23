@@ -1,5 +1,6 @@
 package hr.projekt.todoapplication.util;
 
+import hr.projekt.todoapplication.exceptions.MenuLoadingException;
 import hr.projekt.todoapplication.model.user.AdminUser;
 import hr.projekt.todoapplication.model.user.User;
 import hr.projekt.todoapplication.repository.UserRepository;
@@ -15,9 +16,13 @@ public class MenuLoader {
     private static final Logger logger = LoggerFactory.getLogger(MenuLoader.class);
     private static UserRepository userRepository = UserRepository.getInstance();
 
+    private MenuLoader() {}
+
     public static void loadMenuForCurrentUser(Pane container) {
+        String fxmlMenu = "";
         Optional<User> currentUser = userRepository.getCurrentUser();
-        String fxmlMenu = currentUser.get() instanceof AdminUser ? "/hr/projekt/todoapplication/menu/admin-menu.fxml" : "/hr/projekt/todoapplication/menu/user-menu.fxml";
+        if(currentUser.isPresent())
+            fxmlMenu = currentUser.get() instanceof AdminUser ? "/hr/projekt/todoapplication/menu/admin-menu.fxml" : "/hr/projekt/todoapplication/menu/user-menu.fxml";
 
         try{
             FXMLLoader loader = new FXMLLoader(MenuLoader.class.getResource(fxmlMenu));
@@ -25,8 +30,7 @@ public class MenuLoader {
             container.getChildren().setAll(menu);
             logger.debug("Učitani meni: {}", fxmlMenu);
         } catch (IOException e) {
-            logger.error("Greska ucitavanje menija: {}", fxmlMenu, e);
-            throw new RuntimeException(e);
+            throw new MenuLoadingException(e);
         }
     }
 }

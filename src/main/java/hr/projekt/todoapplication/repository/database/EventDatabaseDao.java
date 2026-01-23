@@ -1,5 +1,6 @@
 package hr.projekt.todoapplication.repository.database;
 
+import hr.projekt.todoapplication.exceptions.DatabaseException;
 import hr.projekt.todoapplication.model.event.Event;
 import hr.projekt.todoapplication.model.event.EventCategory;
 import hr.projekt.todoapplication.model.event.PriorityLevel;
@@ -40,16 +41,17 @@ public class EventDatabaseDao implements EventDao{
             statement.executeUpdate();
 
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new DatabaseException(e);
         }
     }
 
     @Override
     public List<Event> findByUserId(String userId)  throws IOException {
         List<Event> events = new ArrayList<>();
-        Connection conn = DatabaseUtil.createConnection();
-        try {
-            PreparedStatement statement = conn.prepareStatement(SELECT_EVENTS_BY_USER_ID_QUERY);
+
+        try (Connection conn = DatabaseUtil.createConnection();
+             PreparedStatement statement = conn.prepareStatement(SELECT_EVENTS_BY_USER_ID_QUERY)) {
+
             statement.setString(1, userId);
             ResultSet rs = statement.executeQuery();
 
@@ -72,8 +74,6 @@ public class EventDatabaseDao implements EventDao{
         } catch (SQLException e) {
             logger.error("Greška pri učitavanju događaja: {}", e.getMessage());
         }
-
-        DatabaseUtil.closeConnection(conn);
         return events;
     }
 
@@ -84,11 +84,15 @@ public class EventDatabaseDao implements EventDao{
 
     @Override
     public void update(Event event) {
-
+        /*
+        ovo ce se dodati
+         */
     }
 
     @Override
     public void delete(String id) {
-
+        /*
+        ovo ce se dodati
+         */
     }
 }

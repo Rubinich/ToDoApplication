@@ -3,9 +3,6 @@ package hr.projekt.todoapplication.model.user;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.*;
-import java.util.stream.Collectors;
-
 /**
  * Omogucuje administrativne funkcionalnosti unutar aplikacije.
  * <p>
@@ -22,15 +19,6 @@ public class AdminUser extends User {
     private static final Logger log = LoggerFactory.getLogger(AdminUser.class);
     public AdminUser() {
         super();
-        this.userType = UserType.ADMIN;
-    }
-    /**
-     * Stvara novog administratora s definiranim korisnickim imenom i lozinkom.
-     *
-     * @param username korisnicko ime administratora
-     */
-    public AdminUser(String username) {
-        super(username);
         this.userType = UserType.ADMIN;
     }
 

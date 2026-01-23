@@ -7,6 +7,8 @@ import java.util.Optional;
 
 public class DialogUtil {
 
+    private DialogUtil() {}
+
     public static void showError(String msg) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Greška");

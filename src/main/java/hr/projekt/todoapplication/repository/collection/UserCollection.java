@@ -7,10 +7,18 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class UserCollection implements Serializable {
-    public Set<User> users = new HashSet<>();
+    private Set<User> users = new HashSet<>();
     public UserCollection() {
         /*
         ovo je za serijalizaciju
          */
+    }
+
+    public Set<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(Set<User> users) {
+        this.users = users;
     }
 }

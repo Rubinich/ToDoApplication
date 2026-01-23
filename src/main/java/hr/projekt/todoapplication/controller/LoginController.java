@@ -3,7 +3,6 @@ package hr.projekt.todoapplication.controller;
 import hr.projekt.todoapplication.ToDoApplication;
 import hr.projekt.todoapplication.model.user.RegularUser;
 import hr.projekt.todoapplication.model.user.User;
-import hr.projekt.todoapplication.model.user.UserType;
 import hr.projekt.todoapplication.repository.UserRepository;
 import hr.projekt.todoapplication.util.DialogUtil;
 import javafx.fxml.FXML;
@@ -11,7 +10,6 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import java.io.IOException;
 import java.util.Optional;
 
@@ -36,7 +34,7 @@ public class LoginController {
             try {
                 Optional<User> userOpt = userRepository.authenticate(username, password);
                 if (userOpt.isPresent()) {
-                    ToDoApplication.showMainScreen();
+                    ToDoApplication.getInstance().showMainScreen();
                 } else {
                     DialogUtil.showError("""
                             Korisnik s unesenim podacima nije pronađen!

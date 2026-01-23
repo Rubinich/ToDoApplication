@@ -3,18 +3,12 @@ package hr.projekt.todoapplication.repository.storage;
 import jakarta.json.bind.Jsonb;
 import jakarta.json.bind.JsonbBuilder;
 import jakarta.json.bind.JsonbConfig;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Optional;
 
 public final class JsonStorage<T> implements Storage<T> {
-    private static final Logger logger = LoggerFactory.getLogger(JsonStorage.class);
-    private static final Path USERS_FILE = Path.of("data/users.json");
-
     private final Class<T> type;
     private final Jsonb jsonb;
 

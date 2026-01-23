@@ -30,7 +30,7 @@ public class Event implements Serializable {
      * @param builder objekt koji sadrzi sve podatke potrebne za stvaranje dogadaja
      */
     private Event(EventBuilder builder) {
-        this.id = UUID.randomUUID().toString();
+        this.id = builder.id;
         this.title = builder.title;
         this.description = builder.description;
         this.dueDate = builder.dueDate;
@@ -94,6 +94,7 @@ public class Event implements Serializable {
          * @param dueDate datum i vrijeme odrzavanja dogadaja
          */
         public EventBuilder(String title, String description, LocalDateTime dueDate, String ownerId) {
+            this.id = UUID.randomUUID().toString();
             this.title = title;
             this.description = description;
             this.dueDate = dueDate;

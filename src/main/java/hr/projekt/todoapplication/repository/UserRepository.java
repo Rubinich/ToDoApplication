@@ -6,6 +6,7 @@ import hr.projekt.todoapplication.repository.database.UserDao;
 import hr.projekt.todoapplication.repository.database.UserDatabaseDao;
 import hr.projekt.todoapplication.repository.storage.JsonStorage;
 import hr.projekt.todoapplication.repository.storage.Storage;
+import hr.projekt.todoapplication.util.PasswordUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,18 +28,20 @@ public class UserRepository {
         this.databaseStorage = new UserDatabaseDao();
     }
     public static UserRepository getInstance() {
-        if (instance == null)
-            instance = new UserRepository();
-        return instance;
+        return Optional.ofNullable(instance)
+                .orElseGet(() -> {
+                    instance = new UserRepository();
+                    return instance;
+                });
     }
 
     public boolean saveUser(User user) {
         try {
             UserCollection collection = jsonStorage.read(USERS_FILE).orElse(new UserCollection());
-            boolean exists = collection.users.stream().anyMatch(u -> u.getUsername().equals(user.getUsername()));
+            boolean exists = collection.getUsers().stream().anyMatch(u -> u.getUsername().equals(user.getUsername()));
             if(exists)
                 return false;
-            collection.users.add(user);  // program
+            collection.getUsers().add(user);  // program
             jsonStorage.write(USERS_FILE, collection);  // json
             databaseStorage.save(user);  // baza podataka
             return true;
@@ -56,12 +59,6 @@ public class UserRepository {
             logger.info("Uspjesna prijava iz baze.");
         } else
             logger.info("Neuspjesna prijava iz baze.");
-
-//        Optional<UserCollection> collection = jsonStorage.read(USERS_FILE);
-//        Optional<User> foundUser = collection.get().users.stream()
-//                .filter(user -> user.getUsername().equals(username) && user.getPassword().equals(password))
-//                .findFirst();
-
         return foundUser;
     }
 

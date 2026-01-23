@@ -6,5 +6,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EventCollection implements Serializable {
-    public List<Event> events = new ArrayList<>();
+    private List<Event> events = new ArrayList<>();
+
+    public List<Event> getEvents() {
+        return events;
+    }
+
+    public void setEvents(List<Event> events) {
+        this.events = events;
+    }
 }

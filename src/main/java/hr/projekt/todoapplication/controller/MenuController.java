@@ -1,10 +1,12 @@
 package hr.projekt.todoapplication.controller;
 
 import hr.projekt.todoapplication.ToDoApplication;
+import hr.projekt.todoapplication.exceptions.MenuLoadingException;
 import hr.projekt.todoapplication.repository.UserRepository;
 import hr.projekt.todoapplication.util.DialogUtil;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 
@@ -15,10 +17,11 @@ public class MenuController {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(ToDoApplication.class.getResource("main-screen.fxml"));
             Scene scene = new Scene(fxmlLoader.load(), 1024, 768);
+            Stage stage = ToDoApplication.getInstance().getMainStage();
+            stage.setTitle("Početak");
+            stage.setScene(scene);
+            stage.show();
 
-            ToDoApplication.getMainStage().setTitle("Početak");
-            ToDoApplication.getMainStage().setScene(scene);
-            ToDoApplication.getMainStage().show();
         } catch (IOException | IllegalStateException e) {
             e.printStackTrace();
         }
@@ -28,10 +31,11 @@ public class MenuController {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(ToDoApplication.class.getResource("event/event-search-screen.fxml"));
             Scene scene = new Scene(fxmlLoader.load(), 1024, 768);
+            Stage stage = ToDoApplication.getInstance().getMainStage();
+            stage.setTitle("Pretraga događaja");
+            stage.setScene(scene);
+            stage.show();
 
-            ToDoApplication.getMainStage().setTitle("Pretraga događaja");
-            ToDoApplication.getMainStage().setScene(scene);
-            ToDoApplication.getMainStage().show();
         } catch (IOException | IllegalStateException e) {
             e.printStackTrace();
         }
@@ -41,16 +45,17 @@ public class MenuController {
         try{
             FXMLLoader fxmlLoader = new FXMLLoader(ToDoApplication.class.getResource("event/event-add-screen.fxml"));
             Scene scene = new Scene(fxmlLoader.load(), 1024, 768);
+            Stage stage = ToDoApplication.getInstance().getMainStage();
+            stage.setTitle("Dodavanje događaja");
+            stage.setScene(scene);
+            stage.show();
 
-            ToDoApplication.getMainStage().setTitle("Dodavanje događaja");
-            ToDoApplication.getMainStage().setScene(scene);
-            ToDoApplication.getMainStage().show();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public void odjaviSe() {
+    public void logoutEvent() {
         try{
             boolean confirmed = DialogUtil.showConfirm("Jeste li sigurni da se želite odjaviti?");
             if(!confirmed)
@@ -59,12 +64,13 @@ public class MenuController {
             userRepository.logout();
             FXMLLoader fxmlLoader = new FXMLLoader(ToDoApplication.class.getResource("login-screen.fxml"));
             Scene scene = new Scene(fxmlLoader.load(), 1024, 768);
-            ToDoApplication.getMainStage().setTitle("Prijava");
-            ToDoApplication.getMainStage().setScene(scene);
-            ToDoApplication.getMainStage().show();
+            Stage stage = ToDoApplication.getInstance().getMainStage();
+            stage.setTitle("Prijava");
+            stage.setScene(scene);
+            stage.show();
 
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new MenuLoadingException(e);
         }
     }
 }
