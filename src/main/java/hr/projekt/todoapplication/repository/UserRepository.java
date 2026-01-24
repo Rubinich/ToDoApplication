@@ -6,10 +6,8 @@ import hr.projekt.todoapplication.repository.database.UserDao;
 import hr.projekt.todoapplication.repository.database.UserDatabaseDao;
 import hr.projekt.todoapplication.repository.storage.JsonStorage;
 import hr.projekt.todoapplication.repository.storage.Storage;
-import hr.projekt.todoapplication.util.PasswordUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.*;

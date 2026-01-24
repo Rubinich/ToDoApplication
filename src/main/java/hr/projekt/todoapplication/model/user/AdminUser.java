@@ -22,6 +22,11 @@ public class AdminUser extends User {
         this.userType = UserType.ADMIN;
     }
 
+    public AdminUser(String username, String password) {
+        super(username, password);
+        this.userType = UserType.ADMIN;
+    }
+
     public AdminUser(String id, String username, String password, UserType userType) {
         super(id, username, password, userType);
     }

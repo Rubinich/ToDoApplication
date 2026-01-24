@@ -3,6 +3,7 @@ package hr.projekt.todoapplication.controller;
 import hr.projekt.todoapplication.ToDoApplication;
 import hr.projekt.todoapplication.exceptions.MenuLoadingException;
 import hr.projekt.todoapplication.repository.UserRepository;
+import hr.projekt.todoapplication.util.DatabaseBackupUtil;
 import hr.projekt.todoapplication.util.DialogUtil;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -71,6 +72,30 @@ public class MenuController {
 
         } catch (IOException e) {
             throw new MenuLoadingException(e);
+        }
+    }
+
+    public void backupUsers() {
+        boolean confirmed = DialogUtil.showConfirm("""
+                        Kreirati backup tablice USERS?
+                        
+                        Backup: USERS_BACKUP""");
+
+        if (confirmed) {
+            DatabaseBackupUtil.createBackup("USERS");
+            DialogUtil.showInfo("Backup pokrenut! Provjerite log za rezultat.");
+        }
+    }
+
+    public void backupEvents() {
+        boolean confirmed = DialogUtil.showConfirm("""
+                Kreirati backup tablice EVENTS?
+                
+                Backup: EVENTS_BACKUP""");
+
+        if (confirmed) {
+            DatabaseBackupUtil.createBackup("EVENTS");
+            DialogUtil.showInfo("Backup pokrenut! Provjerite log za rezultat.");
         }
     }
 }

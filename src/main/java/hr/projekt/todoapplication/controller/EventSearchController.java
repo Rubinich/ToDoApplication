@@ -151,7 +151,7 @@ public class EventSearchController{
         try {
             LocalDateTime parsed = LocalDateTime.parse(input, TF);
             return dateTime.equals(parsed);
-        } catch (DateTimeParseException e) {
+        } catch (DateTimeParseException _) {
             return false;
         }
     }

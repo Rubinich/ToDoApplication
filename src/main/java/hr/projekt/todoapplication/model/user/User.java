@@ -26,16 +26,13 @@ import java.util.UUID;
         }
 )
 public abstract class User implements Serializable {
-    private static final Logger logger = LoggerFactory.getLogger(User.class);
-
     protected String id;
     protected String username;
     protected String password;
     @JsonbTransient
     protected UserType userType;
 
-    protected User() {
-    }
+    protected User() {}
 
     // prilikom citanja iz baze
     protected User(String id, String username, String password, UserType userType) {

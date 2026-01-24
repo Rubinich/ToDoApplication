@@ -44,3 +44,5 @@ build/
 ### Database ###
 /database.properties
 /src/main/resources/database.properties
+/default-admin.properties
+/src/main/resources/default-admin.properties

@@ -2,6 +2,7 @@ package hr.projekt.todoapplication;
 
 import hr.projekt.todoapplication.util.DatabaseUtil;
 import hr.projekt.todoapplication.util.DialogUtil;
+import hr.projekt.todoapplication.util.InitialDataLoader;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -47,6 +48,8 @@ public class ToDoApplication extends Application {
             Platform.exit();
             System.exit(1);
         }
+
+        InitialDataLoader.loadDefaultAdmin();
 
         FXMLLoader fxmlLoader = new FXMLLoader(ToDoApplication.class.getResource("login-screen.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 1024, 768);

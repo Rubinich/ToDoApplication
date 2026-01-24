@@ -13,5 +13,9 @@
                         <MenuItem mnemonicParsing="false" onAction="#openAddEvent" text="Dodaj" />
                         <MenuItem mnemonicParsing="false" onAction="#logoutEvent" text="Odjavi se" />
                 </Menu>
+                <Menu mnemonicParsing="false" text="Kreiraj backup">
+                        <MenuItem mnemonicParsing="false" onAction="#backupUsers" text="Tablica korisnici"/>
+                        <MenuItem mnemonicParsing="false" onAction="#backupEvents" text="Tablica događaji"/>
+                </Menu>
         </MenuBar>
 </AnchorPane>
