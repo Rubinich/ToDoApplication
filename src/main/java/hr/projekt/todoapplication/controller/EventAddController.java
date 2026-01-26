@@ -29,8 +29,16 @@ public class EventAddController {
     @FXML private ComboBox<EventCategory> categoryCombo;
     @FXML private ComboBox<PriorityLevel> priorityCombo;
     @FXML private VBox menuContainer;
+
     private final EventRepository eventRepository = EventRepository.getInstance();
     private final UserRepository userRepository = UserRepository.getInstance();
+
+    private Event eventToEdit;
+    private Runnable onEventChanged;
+
+    public void setOnEventChanged(Runnable callback) {
+        this.onEventChanged = callback;
+    }
 
     @FXML
     public void initialize() {
@@ -46,6 +54,87 @@ public class EventAddController {
         categoryCombo.setValue(EventCategory.OSNOVNO);
         priorityCombo.setItems(FXCollections.observableArrayList(PriorityLevel.values()));
         priorityCombo.setValue(PriorityLevel.ZADANO);
+    }
+
+    public void getDataForUpdate(Event event) {
+        this.eventToEdit = event;
+        titleField.setText(event.getTitle());
+        descriptionField.setText(event.getDescription());
+        dateField.setValue(event.getDueDate().toLocalDate());
+        hourSpinner.getValueFactory().setValue(event.getDueDate().getHour());
+        minuteSpinner.getValueFactory().setValue(event.getDueDate().getMinute());
+        categoryCombo.setValue(event.getInfo().category());
+        priorityCombo.setValue(event.getInfo().priority());
+    }
+
+    @FXML
+    private void createEvent() {
+        if (!validateInput()) {
+            return;
+        }
+        LocalDateTime date = getDateTimeFromInputs();
+
+        userRepository.getCurrentUser().ifPresentOrElse(
+                user -> {
+                    Event.EventBuilder builder = new Event.EventBuilder(
+                            titleField.getText().trim(),
+                            descriptionField.getText().trim(),
+                            date,
+                            user.getId())
+                            .category(categoryCombo.getValue())
+                            .priority(priorityCombo.getValue());
+                    if (eventToEdit != null) {
+                        builder.id(eventToEdit.getId());
+                        Event updatedEvent = builder.build();
+                        eventRepository.updateEvent(updatedEvent);
+                        DialogUtil.showInfo("Događaj uspješno ažuriran!");
+
+                        if (onEventChanged != null) {
+                            onEventChanged.run();
+                        }
+                        eventToEdit = null;
+                    } else {
+                        Event newEvent = builder.build();
+                        eventRepository.saveEvent(newEvent);
+                        DialogUtil.showInfo("Događaj uspješno kreiran i spremljen!");
+                    }
+                    clearFields();
+                },
+                () -> DialogUtil.showError("Nema prijavljenog korisnika")
+        );
+    }
+
+    private boolean validateInput() {
+        String title = titleField.getText().trim();
+        if (title.isEmpty()) {
+            DialogUtil.showError("Naslov ne smije biti prazan!");
+            return false;
+        }
+
+        String description = descriptionField.getText().trim();
+        if (description.isEmpty()) {
+            DialogUtil.showError("Opis ne smije biti prazan!");
+            return false;
+        }
+
+        Optional<LocalDate> dueDate = Optional.ofNullable(dateField.getValue());
+        if (dueDate.isEmpty()) {
+            DialogUtil.showError("Morate odabrati datum!");
+            return false;
+        }
+
+        LocalDateTime date = getDateTimeFromInputs();
+        if (date.isBefore(LocalDateTime.now())) {
+            DialogUtil.showError("Datum događaja ne može biti u prošlosti!");
+            return false;
+        }
+        return true;
+    }
+
+    private LocalDateTime getDateTimeFromInputs() {
+        LocalDate date = dateField.getValue();
+        LocalTime time = LocalTime.of(hourSpinner.getValue(), minuteSpinner.getValue());
+        return LocalDateTime.of(date, time);
     }
 
     private void setupDatePickerConfig() {
@@ -87,44 +176,6 @@ public class EventAddController {
             }
         });
     }
-
-    @FXML
-    private void createEvent() {
-        String title = titleField.getText().trim();
-        if (title.isEmpty()) {
-            DialogUtil.showError("Naslov ne smije biti prazan!");
-            return;
-        }
-        String description = descriptionField.getText().trim();
-        if (description.isEmpty()) {
-            DialogUtil.showError("Opis ne smije biti prazan!");
-            return;
-        }
-        Optional<LocalDate> dueDate = Optional.ofNullable(dateField.getValue());
-        if(dueDate.isEmpty()) {
-            DialogUtil.showError("Morate odabrati datum!");
-            return;
-        }
-        LocalDateTime date = LocalDateTime.of(dueDate.get(), LocalTime.of(hourSpinner.getValue(), minuteSpinner.getValue()));
-        if(date.isBefore(LocalDateTime.now())) {
-            DialogUtil.showError("Datum događaja ne može biti u prošlosti!");
-            return;
-        }
-
-        userRepository.getCurrentUser().ifPresentOrElse(
-                user -> {
-                    Event newEvent = new Event.EventBuilder(title, description, date, user.getId())
-                            .category(categoryCombo.getValue())
-                            .priority(priorityCombo.getValue())
-                            .build();
-                    eventRepository.saveEvent(newEvent);
-                    DialogUtil.showInfo("Događaj uspješno kreiran i spremljen!");
-                    clearFields();
-                },
-                () -> DialogUtil.showError("Nema prijavljenog korisnika")
-        );
-    }
-
     private void clearFields() {
         titleField.clear();
         descriptionField.clear();

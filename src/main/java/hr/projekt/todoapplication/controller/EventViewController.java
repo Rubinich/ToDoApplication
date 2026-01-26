@@ -5,6 +5,7 @@ import hr.projekt.todoapplication.model.user.User;
 import hr.projekt.todoapplication.repository.EventRepository;
 import hr.projekt.todoapplication.repository.UserRepository;
 import hr.projekt.todoapplication.util.MenuLoader;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -12,12 +13,11 @@ import javafx.scene.layout.VBox;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.io.IOException;
-import java.net.URL;
 import java.util.List;
 import java.util.Optional;
 
 public class EventViewController {
-    private static final Logger log = LoggerFactory.getLogger(EventViewController.class);
+    private static final Logger logger = LoggerFactory.getLogger(EventViewController.class);
     private static final String EVENT_CARD_PATH = "/hr/projekt/todoapplication/event/event-card-screen.fxml";
 
     @FXML private VBox eventContainer;
@@ -33,36 +33,34 @@ public class EventViewController {
     }
 
     private void loadEventsOnScreen() {
-        eventContainer.getChildren().clear();
         Optional<User> currentUser = userRepository.getCurrentUser();
         if(currentUser.isEmpty()) {
-            log.error("Nema prijavljenog korisnika");
+            logger.error("Nema prijavljenog korisnika");
             return;
         }
-        List<Event> events = eventRepository.getCurrentUserEvents();
-        if(events == null) {
-            log.error("Lista događaja je NULL!");
-            return;
-        }
+        logger.info("Učitavam događaje za: {}", currentUser.get().getUsername());
 
-        if(events.isEmpty()) {
-            log.warn("Lista događaja je PRAZNA za korisnika: {}", currentUser.get().getUsername());
-            return;
-        }
-        for(Event event: events) {
-            try{
-                addEventCard(event);
-            } catch (IOException e) {
-                log.error("Greška pri dodavanju: {}",e.getMessage(), e);
-            }
-        }
+        Thread.ofVirtual().start(() -> {
+            List<Event> events = eventRepository.findEventsByUserId(currentUser.get().getId());
+            Platform.runLater(() -> {
+                eventContainer.getChildren().clear();
+                for(Event event : events)
+                    addEventCard(event);
+            });
+        });
+
     }
 
-    private void addEventCard(Event event) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource(EVENT_CARD_PATH));
-        Parent eventCard = loader.load();
-        EventCardController controller = loader.getController();
-        controller.setEvent(event);
-        eventContainer.getChildren().add(eventCard);
+    private void addEventCard(Event event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(EVENT_CARD_PATH));
+            Parent eventCard = loader.load();
+            EventCardController controller = loader.getController();
+            controller.setEvent(event);
+            controller.setOnEventChanged(this::loadEventsOnScreen);
+            eventContainer.getChildren().add(eventCard);
+        } catch (IOException e) {
+            logger.info("Greška prilikom dodavanje kartice događaja: {}", e.getMessage());
+        }
     }
 }

@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.sql.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +18,8 @@ public class EventDatabaseDao implements EventDao{
     private static final Logger logger = LoggerFactory.getLogger(EventDatabaseDao.class);
     private static final String INSERT_EVENT_QUERY = "INSERT INTO EVENTS (ID, TITLE, DESCRIPTION, DUE_DATE, PRIORITY, CATEGORY, USER_ID) VALUES (?, ?, ?, ?, ?, ?, ?)";
     private static final String SELECT_EVENTS_BY_USER_ID_QUERY = "SELECT ID, TITLE, DESCRIPTION, DUE_DATE, PRIORITY, CATEGORY, USER_ID FROM EVENTS WHERE USER_ID = ? ORDER BY DUE_DATE";
+    private static final String DELETE_EVENT_QUERY = "DELETE FROM EVENTS WHERE ID = ?";
+    private static final String UPDATE_EVENT_QUERY = "UPDATE EVENTS SET TITLE = ?, DESCRIPTION = ?, DUE_DATE = ?, PRIORITY = ?, CATEGORY = ? WHERE ID = ?";
 
     private static final String COLUMN_ID = "ID";
     private static final String COLUMN_TITLE = "TITLE";
@@ -84,15 +87,33 @@ public class EventDatabaseDao implements EventDao{
 
     @Override
     public void update(Event event) {
-        /*
-        ovo ce se dodati
-         */
+        try(Connection conn = DatabaseUtil.createConnection();
+            PreparedStatement statement = conn.prepareStatement(UPDATE_EVENT_QUERY);) {
+            statement.setString(1, event.getTitle());
+            statement.setString(2, event.getDescription());
+            statement.setTimestamp(3, Timestamp.valueOf(event.getDueDate()));
+            statement.setString(4, event.getInfo().priority().name());
+            statement.setString(5, event.getInfo().category().name());
+            statement.setString(6, event.getId());
+            statement.executeUpdate();
+
+        } catch(SQLException e) {
+            logger.error("Greška pri ažuriranju događaja: {}", e.getMessage());
+            throw new DatabaseException(e);
+        }
     }
 
     @Override
-    public void delete(String id) {
-        /*
-        ovo ce se dodati
-         */
+    public void delete(String eventId) {
+        try(Connection conn = DatabaseUtil.createConnection();
+            PreparedStatement statement = conn.prepareStatement(DELETE_EVENT_QUERY);) {
+
+            statement.setString(1, eventId);
+            statement.executeUpdate();
+
+        } catch(SQLException e) {
+            logger.error("Greška pri brisanju događaja: {}", e.getMessage());
+            throw new DatabaseException(e);
+        }
     }
 }

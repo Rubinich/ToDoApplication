@@ -45,9 +45,34 @@ public class EventRepository {
         }
     }
 
-    public List<Event> getCurrentUserEvents() {
-        Optional<User> currentUser = userRepository.getCurrentUser();
-        return findEventsByUserId(currentUser.get().getId());
+    public void updateEvent(Event event) {
+        try{
+              databaseStorage.update(event);
+              EventCollection collection = jsonStorage.read(EVENTS_FILE).orElse(new EventCollection());
+              List<Event> events = collection.getEvents();
+              for(Event e : events) {
+                  if(e.getId().equals(event.getId())) {
+                      events.add(e);
+                      break;
+                  }
+              }
+              jsonStorage.write(EVENTS_FILE, collection);
+
+        } catch (IOException | ClassNotFoundException e) {
+            throw new StorageException(e);
+        }
+    }
+
+    public void deleteEvent(String eventId) {
+        try {
+            databaseStorage.delete(eventId);  // baza podataka
+            EventCollection collection = jsonStorage.read(EVENTS_FILE).orElse(new EventCollection());
+            collection.getEvents().removeIf(e -> e.getId().equals(eventId));  // program
+            jsonStorage.write(EVENTS_FILE, collection); // json
+
+        } catch (IOException | ClassNotFoundException e) {
+            throw new StorageException(e);
+        }
     }
 
     public List<Event> findEventsByUserId(String userId) {
@@ -57,5 +82,4 @@ public class EventRepository {
             throw new StorageException(e);
         }
     }
-
 }

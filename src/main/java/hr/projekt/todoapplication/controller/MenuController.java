@@ -24,7 +24,7 @@ public class MenuController {
             stage.show();
 
         } catch (IOException | IllegalStateException e) {
-            e.printStackTrace();
+            throw new MenuLoadingException(e);
         }
     }
 
@@ -38,7 +38,7 @@ public class MenuController {
             stage.show();
 
         } catch (IOException | IllegalStateException e) {
-            e.printStackTrace();
+            throw new MenuLoadingException(e);
         }
     }
 
@@ -52,7 +52,7 @@ public class MenuController {
             stage.show();
 
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new MenuLoadingException(e);
         }
     }
 
