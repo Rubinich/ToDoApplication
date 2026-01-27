@@ -76,17 +76,12 @@ public class EventAddController {
 
         userRepository.getCurrentUser().ifPresentOrElse(
                 user -> {
-                    Event.EventBuilder builder = new Event.EventBuilder(
-                            titleField.getText().trim(),
-                            descriptionField.getText().trim(),
-                            date,
-                            user.getId())
+                    Event.EventBuilder builder = new Event.EventBuilder(titleField.getText().trim(), descriptionField.getText().trim(), date, user.getId())
                             .category(categoryCombo.getValue())
                             .priority(priorityCombo.getValue());
                     if (eventToEdit != null) {
-                        builder.id(eventToEdit.getId());
-                        Event updatedEvent = builder.build();
-                        eventRepository.updateEvent(updatedEvent);
+                        Event updatedEvent = builder.id(eventToEdit.getId()).build();
+                        eventRepository.updateEventToEverywhere(updatedEvent);
                         DialogUtil.showInfo("Događaj uspješno ažuriran!");
 
                         if (onEventChanged != null) {
@@ -95,7 +90,7 @@ public class EventAddController {
                         eventToEdit = null;
                     } else {
                         Event newEvent = builder.build();
-                        eventRepository.saveEvent(newEvent);
+                        eventRepository.saveEventToEverywhere(newEvent);
                         DialogUtil.showInfo("Događaj uspješno kreiran i spremljen!");
                     }
                     clearFields();

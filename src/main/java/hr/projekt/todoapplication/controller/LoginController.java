@@ -3,6 +3,7 @@ package hr.projekt.todoapplication.controller;
 import hr.projekt.todoapplication.ToDoApplication;
 import hr.projekt.todoapplication.model.user.RegularUser;
 import hr.projekt.todoapplication.model.user.User;
+import hr.projekt.todoapplication.repository.EventRepository;
 import hr.projekt.todoapplication.repository.UserRepository;
 import hr.projekt.todoapplication.util.DialogUtil;
 import javafx.fxml.FXML;
@@ -18,10 +19,12 @@ public class LoginController {
     @FXML private TextField usernameField;
     @FXML private PasswordField passwordField;
     private UserRepository userRepository;
+    private EventRepository eventRepository;
 
     @FXML
     void initialize() {
         this.userRepository = UserRepository.getInstance();
+        this.eventRepository = EventRepository.getInstance();
         passwordField.setOnAction(event -> handleLogin());
     }
 
@@ -34,6 +37,7 @@ public class LoginController {
             try {
                 Optional<User> userOpt = userRepository.authenticate(username, password);
                 if (userOpt.isPresent()) {
+                    eventRepository.loadEventsFromDatabaseForCurrentUser(userOpt.get().getId());
                     ToDoApplication.getInstance().showMainScreen();
                 } else {
                     DialogUtil.showError("""
@@ -58,6 +62,8 @@ public class LoginController {
 
         if (userRepository.saveUser(new RegularUser(username, password))) {
             DialogUtil.showInfo("Registracija uspješna!");
+            usernameField.clear();
+            passwordField.clear();
         } else {
             DialogUtil.showError("Registracija nije uspjela. Korisničko ime je zauzeto.");
         }

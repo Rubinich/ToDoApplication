@@ -2,6 +2,7 @@ package hr.projekt.todoapplication.controller;
 
 import hr.projekt.todoapplication.ToDoApplication;
 import hr.projekt.todoapplication.exceptions.MenuLoadingException;
+import hr.projekt.todoapplication.repository.EventRepository;
 import hr.projekt.todoapplication.repository.UserRepository;
 import hr.projekt.todoapplication.util.DatabaseBackupUtil;
 import hr.projekt.todoapplication.util.DialogUtil;
@@ -63,6 +64,7 @@ public class MenuController {
                 return;
 
             userRepository.logout();
+            EventRepository.getInstance().clearCache();
             FXMLLoader fxmlLoader = new FXMLLoader(ToDoApplication.class.getResource("login-screen.fxml"));
             Scene scene = new Scene(fxmlLoader.load(), 1024, 768);
             Stage stage = ToDoApplication.getInstance().getMainStage();

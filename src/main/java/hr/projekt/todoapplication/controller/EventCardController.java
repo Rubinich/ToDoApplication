@@ -95,9 +95,8 @@ public class EventCardController {
 
         Thread.ofVirtual().start(() -> {
             try{
-                eventRepository.deleteEvent(event.getId());
+                eventRepository.deleteEventFromEverywhere(event.getId());
                 Platform.runLater(() -> {
-                    DialogUtil.showInfo("Događaj uspješno obrisan!");
                     if (onEventChanged != null) onEventChanged.run();
                 });
 

@@ -52,10 +52,7 @@ public class EventSearchController{
         columnDesc.setCellValueFactory(param -> new ReadOnlyStringWrapper(Optional.ofNullable(param.getValue().getDescription()).orElse("")));
         columnDate.setCellValueFactory(param -> new ReadOnlyStringWrapper(Optional.ofNullable(param.getValue().getDueDate()).map(DTF::format).orElse("")));
 
-        List<Event> events = userRepository.getCurrentUser()
-                .map(user -> eventRepository.findEventsByUserId(user.getId()))
-                .orElse(Collections.emptyList());
-        filteredEvents = new FilteredList<>(FXCollections.observableArrayList(events));
+        filteredEvents = new FilteredList<>(FXCollections.observableArrayList(eventRepository.getCachedEvents()));
         table.setItems(filteredEvents);
         table.setPlaceholder(new Label(""));
 

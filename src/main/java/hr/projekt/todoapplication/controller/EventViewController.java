@@ -40,15 +40,10 @@ public class EventViewController {
         }
         logger.info("Učitavam događaje za: {}", currentUser.get().getUsername());
 
-        Thread.ofVirtual().start(() -> {
-            List<Event> events = eventRepository.findEventsByUserId(currentUser.get().getId());
-            Platform.runLater(() -> {
-                eventContainer.getChildren().clear();
-                for(Event event : events)
-                    addEventCard(event);
-            });
-        });
-
+        List<Event> events = eventRepository.getCachedEvents();
+        eventContainer.getChildren().clear();
+        for (Event event : events)
+            addEventCard(event);
     }
 
     private void addEventCard(Event event) {
