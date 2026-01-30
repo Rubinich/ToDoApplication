@@ -48,7 +48,6 @@ public abstract class User implements Serializable {
         this.password = PasswordUtil.hashPassword(password);
     }
 
-
     public UserType getUserType() {
         return userType;
     }

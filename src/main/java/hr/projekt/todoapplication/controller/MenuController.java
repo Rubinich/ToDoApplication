@@ -100,4 +100,18 @@ public class MenuController {
             DialogUtil.showInfo("Backup pokrenut! Provjerite log za rezultat.");
         }
     }
+
+    public void openUserManagement() {
+        try{
+            FXMLLoader loader = new FXMLLoader(ToDoApplication.class.getResource("user-management-screen.fxml"));
+            Scene scene = new Scene(loader.load(), 1024, 768);
+            Stage stage = ToDoApplication.getInstance().getMainStage();
+            stage.setTitle("Upravljanje korisnicima");
+            stage.setScene(scene);
+            stage.show();
+
+        } catch (IOException e) {
+            throw new MenuLoadingException(e);
+        }
+    }
 }

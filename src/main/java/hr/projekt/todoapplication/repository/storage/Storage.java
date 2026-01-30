@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Optional;
 
-public sealed interface Storage<T> permits BinaryStorage, JsonStorage {
+public sealed interface Storage<T> permits BinaryStorage, JsonStorage, XmlStorage {
     void write(Path path, T object) throws IOException;
     Optional<T> read(Path usersFile) throws IOException, ClassNotFoundException;
 }

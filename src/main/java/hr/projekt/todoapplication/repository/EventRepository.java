@@ -31,14 +31,14 @@ public class EventRepository {
         });
     }
 
+    public Integer getEventCountForUser(String userId) {
+        return databaseStorage.getEventCountForUser(userId);
+    }
+
     public void loadEventsFromDatabaseForCurrentUser(String userId) {
-        try {
-            List<Event> eventsFromDb = databaseStorage.findByUserId(userId);
-            eventCollection = new EventCollection();
-            eventCollection.setEvents(new ArrayList<>(eventsFromDb));
-        } catch (IOException e) {
-            throw new StorageException(e);
-        }
+        List<Event> eventsFromDb = databaseStorage.findByUserId(userId);
+        eventCollection = new EventCollection();
+        eventCollection.setEvents(new ArrayList<>(eventsFromDb));
     }
 
     public List<Event> getCachedEvents() {
@@ -80,6 +80,19 @@ public class EventRepository {
             jsonStorage.write(EVENTS_FILE, eventCollection); // json
 
         } catch (IOException e) {
+            throw new StorageException(e);
+        }
+    }
+
+    public void deleteAllEventsForUser(String userI) {
+        try {
+            databaseStorage.deleteAllEventsForUser(userI); // baza podataka
+            EventCollection collection = jsonStorage.read(EVENTS_FILE).orElse(new EventCollection());
+            collection.getEvents().removeIf(e -> e.getUserId().equals(userI)); // json
+            jsonStorage.write(EVENTS_FILE, collection);
+            eventCollection.getEvents().removeIf(e -> e.getUserId().equals(userI)); // program
+
+        } catch(IOException | ClassNotFoundException e) {
             throw new StorageException(e);
         }
     }

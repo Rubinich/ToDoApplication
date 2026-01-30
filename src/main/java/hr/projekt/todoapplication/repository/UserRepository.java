@@ -1,6 +1,8 @@
 package hr.projekt.todoapplication.repository;
 
+import hr.projekt.todoapplication.exceptions.StorageException;
 import hr.projekt.todoapplication.model.user.User;
+import hr.projekt.todoapplication.repository.collection.EventCollection;
 import hr.projekt.todoapplication.repository.collection.UserCollection;
 import hr.projekt.todoapplication.repository.database.UserDao;
 import hr.projekt.todoapplication.repository.database.UserDatabaseDao;
@@ -20,10 +22,12 @@ public class UserRepository {
 
     private final Storage<UserCollection> jsonStorage;
     private final UserDao databaseStorage;
+    private UserCollection userCollection;
 
     private UserRepository() {
         this.jsonStorage = new JsonStorage<>(UserCollection.class);
         this.databaseStorage = new UserDatabaseDao();
+        this.userCollection = new UserCollection();
     }
     public static UserRepository getInstance() {
         return Optional.ofNullable(instance)
@@ -66,5 +70,26 @@ public class UserRepository {
 
     public void logout() {
         currentUser = Optional.empty();
+    }
+
+    public Set<User> getAllUsers() {
+        try {
+            return databaseStorage.findAll();
+        } catch (IOException e) {
+            throw new StorageException(e);
+        }
+    }
+
+    public void deleteUser(String userId) {
+        try {
+            databaseStorage.delete(userId); // baza podataka
+            UserCollection collection = jsonStorage.read(USERS_FILE).orElse(new UserCollection());
+            collection.getUsers().removeIf(u -> u.getId().equals(userId)); // json
+            jsonStorage.write(USERS_FILE, collection);
+            userCollection.getUsers().removeIf(u -> u.getId().equals(userId)); // program
+
+        } catch(IOException | ClassNotFoundException e) {
+            throw new StorageException(e);
+        }
     }
 }

@@ -9,6 +9,8 @@ import hr.projekt.todoapplication.util.DatabaseUtil;
 import hr.projekt.todoapplication.util.PasswordUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
 import java.sql.*;
 import java.util.HashSet;
 import java.util.Optional;

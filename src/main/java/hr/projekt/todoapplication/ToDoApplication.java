@@ -3,6 +3,7 @@ package hr.projekt.todoapplication;
 import hr.projekt.todoapplication.util.DatabaseUtil;
 import hr.projekt.todoapplication.util.DialogUtil;
 import hr.projekt.todoapplication.util.InitialDataLoader;
+import hr.projekt.todoapplication.util.XmlLogger;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -59,6 +60,7 @@ public class ToDoApplication extends Application {
     }
 
     public void showMainScreen() {
+        XmlLogger.getInstance().log("Pocetni zaslon");
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(ToDoApplication.class.getResource("main-screen.fxml"));
             Scene scene = new Scene(fxmlLoader.load(), 1024, 768);

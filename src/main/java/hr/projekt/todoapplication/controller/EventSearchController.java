@@ -22,7 +22,6 @@ import java.time.format.DateTimeParseException;
 import java.util.*;
 
 public class EventSearchController{
-
     @FXML private ComboBox<SearchCriteria> comboCriteria;
     @FXML private TextField searchField;
     @FXML private TableView<Event> table;

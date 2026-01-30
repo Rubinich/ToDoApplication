@@ -27,7 +27,7 @@ public class EventViewController {
     private final UserRepository userRepository = UserRepository.getInstance();
 
     @FXML
-    void initialize() {
+    public void initialize() {
         MenuLoader.loadMenuForCurrentUser(menuContainer);
         loadEventsOnScreen();
     }

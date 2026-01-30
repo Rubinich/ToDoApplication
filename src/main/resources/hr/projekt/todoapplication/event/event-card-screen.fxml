@@ -13,8 +13,8 @@
    <VBox fx:id="cardContainer" prefHeight="100.0" spacing="35"
          style="-fx-padding: 10;       -fx-border-color: grey;       -fx-border-width: 3;       -fx-border-radius: 8;       -fx-background-radius: 8; "
          AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
-      <Label fx:id="titleLabel" maxWidth="100" prefWidth="1024.0" style="-fx-font-weight: bold;             "
-             text="Label" textOverrun="ELLIPSIS"/>
+      <Label fx:id="titleLabel" maxWidth="150" prefWidth="1024.0" style="-fx-font-weight: bold;             "
+             text="Label"/>
       <Label fx:id="dateLabel" prefWidth="1024.0" text="Label"/>
    </VBox>
 </AnchorPane>

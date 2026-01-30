@@ -19,7 +19,7 @@ public class InitialDataLoader {
 
     public static void loadDefaultAdmin() {
         loadProperties().ifPresentOrElse(
-                properties -> processAdmin(properties),
+                InitialDataLoader::processAdmin,
                 () -> logger.error("Nije moguće učitati {}", DEFAULT_ADMIN_FILE)
         );
     }

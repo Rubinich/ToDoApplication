@@ -15,4 +15,8 @@ public class EventCollection implements Serializable {
     public void setEvents(List<Event> events) {
         this.events = events;
     }
+
+    public Integer getEventCount() {
+        return events.size();
+    }
 }

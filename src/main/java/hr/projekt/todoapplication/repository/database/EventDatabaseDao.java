@@ -20,6 +20,8 @@ public class EventDatabaseDao implements EventDao{
     private static final String SELECT_EVENTS_BY_USER_ID_QUERY = "SELECT ID, TITLE, DESCRIPTION, DUE_DATE, PRIORITY, CATEGORY, USER_ID FROM EVENTS WHERE USER_ID = ? ORDER BY DUE_DATE";
     private static final String DELETE_EVENT_QUERY = "DELETE FROM EVENTS WHERE ID = ?";
     private static final String UPDATE_EVENT_QUERY = "UPDATE EVENTS SET TITLE = ?, DESCRIPTION = ?, DUE_DATE = ?, PRIORITY = ?, CATEGORY = ? WHERE ID = ?";
+    private static final String COUNT_EVENTS_FOR_USER_QUERY = "SELECT COUNT(*) FROM EVENTS WHERE USER_ID = ?";
+    private static final String DELETE_ALL_EVENTS_FOR_USER_QUERY = "DELETE FROM EVENTS WHERE USER_ID = ?";
 
     private static final String COLUMN_ID = "ID";
     private static final String COLUMN_TITLE = "TITLE";
@@ -49,7 +51,7 @@ public class EventDatabaseDao implements EventDao{
     }
 
     @Override
-    public List<Event> findByUserId(String userId)  throws IOException {
+    public List<Event> findByUserId(String userId) {
         List<Event> events = new ArrayList<>();
 
         try (Connection conn = DatabaseUtil.createConnection();
@@ -81,11 +83,6 @@ public class EventDatabaseDao implements EventDao{
     }
 
     @Override
-    public List<Event> findAll() {
-        return List.of();
-    }
-
-    @Override
     public void update(Event event) {
         try(Connection conn = DatabaseUtil.createConnection();
             PreparedStatement statement = conn.prepareStatement(UPDATE_EVENT_QUERY);) {
@@ -113,6 +110,34 @@ public class EventDatabaseDao implements EventDao{
 
         } catch(SQLException e) {
             logger.error("Greška pri brisanju događaja: {}", e.getMessage());
+            throw new DatabaseException(e);
+        }
+    }
+
+    @Override
+    public Integer getEventCountForUser(String userId) {
+        try(Connection conn = DatabaseUtil.createConnection();
+            PreparedStatement statement = conn.prepareStatement(COUNT_EVENTS_FOR_USER_QUERY)) {
+            statement.setString(1, userId);
+            ResultSet rs = statement.executeQuery();
+            if(rs.next()) {
+                return rs.getInt(1);
+            }
+            return 0;
+
+        } catch (SQLException e) {
+            throw new DatabaseException(e);
+        }
+    }
+
+    @Override
+    public void deleteAllEventsForUser(String userId) {
+        try(Connection conn = DatabaseUtil.createConnection();
+            PreparedStatement statement = conn.prepareStatement(DELETE_ALL_EVENTS_FOR_USER_QUERY)) {
+            statement.setString(1, userId);
+            statement.executeUpdate();
+
+        } catch (SQLException e) {
             throw new DatabaseException(e);
         }
     }

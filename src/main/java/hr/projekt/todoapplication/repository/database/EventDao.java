@@ -7,8 +7,9 @@ import java.util.List;
 
 public interface EventDao {
     void save(Event event);
-    List<Event> findByUserId(String userId) throws IOException;
-    List<Event> findAll();
+    List<Event> findByUserId(String userId);
     void update(Event event);
     void delete(String id);
+    Integer getEventCountForUser(String userId);
+    void deleteAllEventsForUser(String userId);
 }
